@@ -21,8 +21,43 @@ Describe "ConvertTo-NuspecManifest" {
 
     $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
     $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+    $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget2.nuspec"
+    $ScriptPath = Join-Path $env:TEMP "Bca.Nuget\TestScript.ps1"
+    $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
     if (!(Test-Path (Split-Path $NuspecManifest -Parent))) { New-Item -Path (Split-Path $NuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
+    if (!(Test-Path (Split-Path $NuspecManifest2 -Parent))) { New-Item -Path (Split-Path $NuspecManifest2 -Parent) -ItemType Directory -Force | Out-Null }
+    if (!(Test-Path (Split-Path $ScriptNuspecManifest -Parent))) { New-Item -Path (Split-Path $ScriptNuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
 
+    $ScriptInfo = @{
+        Path                       = $ScriptPath
+        Version                    = "1.0.0"
+        Author                     = "pattif@contoso.com"
+        Description                = "My new script file test"
+        CompanyName                = "Contoso Corporation"
+        Copyright                  = "2019 Contoso Corporation. All rights reserved."
+        ExternalModuleDependencies = "ff", "bb"
+        RequiredScripts            = "Start-WFContosoServer", "Stop-ContosoServerScript"
+        ExternalScriptDependencies = "Stop-ContosoServerScript"
+        Tags                       = @("Tag1", "Tag2", "Tag3")
+        ProjectUri                 = "https://contoso.com"
+        LicenseUri                 = "https://contoso.com/License"
+        IconUri                    = "https://contoso.com/Icon"
+        PassThru                   = $True
+        ReleaseNotes               = @("Contoso script now supports the following features:",
+            "Feature 1",
+            "Feature 2",
+            "Feature 3",
+            "Feature 4",
+            "Feature 5")
+        RequiredModules            =
+        "1",
+        "2",
+        "RequiredModule1",
+        @{ModuleName = "RequiredModule2"; ModuleVersion = "1.0" },
+        @{ModuleName = "RequiredModule3"; RequiredVersion = "2.0" },
+        "ExternalModule1"
+    }
+    
     It "Converting PS Module Manifest to Nuspec" {
         try
         {
@@ -37,10 +72,47 @@ Describe "ConvertTo-NuspecManifest" {
         $Result = Test-Path $NuspecManifest
         $Result | Should Be $true
     }
+
+    It "Converting PS Module Info to Nuspec" {
+        try
+        {
+            (Get-Module -Name Bca.Nuget | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest2)
+            $Result = $true
+        }
+        catch { $Result = $false }
+        $Result | Should Be $true
+    }
+
+    It "Testing generated Nuspec file" {
+        $Result = Test-Path $NuspecManifest2
+        $Result | Should Be $true
+    }
+    
+    It "Testing both generated module Nuspec file" {
+        $Result = ((Get-Content $NuspecManifest) -join "`r`n") -eq ((Get-Content $NuspecManifest2) -join "`r`n")
+        $Result | Should Be $true
+    }
+
+    It "Converting Script File Info to Nuspec" {
+        try
+        {
+            New-ScriptFileInfo @ScriptInfo
+            (Test-ScriptFileInfo -Path $ScriptPath | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($ScriptNuspecManifest)
+            $Result = $true
+        }
+        catch { $Result = $false }
+        $Result | Should Be $true
+    }
+
+    It "Testing generated Nuspec file" {
+        $Result = Test-Path $ScriptNuspecManifest
+        $Result | Should Be $true
+    }
 }
 
 Describe "Get-NuspecProperty" {
     $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+    $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
     $Nuspec = [xml](Get-Content -Path $NuspecManifest)
 
     It "Getting Id by Path" {
@@ -53,6 +125,12 @@ Describe "Get-NuspecProperty" {
         $Id = Get-NuspecProperty -Name "id" -Nuspec $Nuspec
         $Id.Name | Should BeExactly "id"
         $Id.Value | Should BeExactly "Bca.Nuget"
+    }
+
+    It "Getting script Title" {
+        $Id = Get-NuspecProperty -Name "title" -Path $ScriptNuspecManifest
+        $Id.Name | Should BeExactly "title"
+        $Id.Value | Should BeExactly "TestScript"
     }
 }
 

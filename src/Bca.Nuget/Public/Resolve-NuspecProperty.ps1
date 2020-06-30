@@ -46,7 +46,7 @@ function Resolve-NuspecProperty
         [Parameter(Mandatory = $false)]
         $Value
     )
-
+    
     $ResolvedProperty = New-Object -TypeName PSCustomObject
     switch -Regex ($Name)
     {
@@ -62,6 +62,11 @@ function Resolve-NuspecProperty
         }
         "^version$|ModuleVersion"
         {
+            switch -Regex ($Value.GetType().Name)
+            {
+                "version" { $Value = $Value.ToString() }
+                "object" { $Value = "$($Value.Major).$($Value.Minor).$($Value.Build)" }
+            }
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "version" -PassThru | Out-Null
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
         }
@@ -111,7 +116,7 @@ function Resolve-NuspecProperty
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "iconUrl" -PassThru | Out-Null
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
         }
-        "dependencies|RequiredModules"
+        "dependencies|RequiredModules|RequiredScripts"
         {
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "dependencies" -PassThru | Out-Null
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
@@ -119,14 +124,16 @@ function Resolve-NuspecProperty
         }
         "tags"
         {
+            if ($Value.GetType().Name -eq "string") { $Value = $Value.Split(",") -join " " }
+            else { $Value = $Value | Select-Object -Unique }
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "tags" -PassThru | Out-Null
-            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $($Value.Split() -join " ") -PassThru | Out-Null
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $($Value.Split(" ") -join " ") -PassThru | Out-Null
         }
         "releaseNotes"
         {
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "releaseNotes" -PassThru | Out-Null
-            if ($Value -like "*.md") { $Value = (Get-Content $Value) -join "`r`n" }
-            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null   
+            if ($Value -like "*.md") { $Value = Get-Content $Value }
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value ($Value -join "`r`n") -PassThru | Out-Null   
         }
         default { Write-Warning "Property '$Name' does not match any mapped Nuspec property." }
     }

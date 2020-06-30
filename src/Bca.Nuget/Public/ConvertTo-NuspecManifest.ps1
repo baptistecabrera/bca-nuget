@@ -20,18 +20,32 @@ function ConvertTo-NuspecManifest
             -----------
             This example will get the content of "package.json" and map properties to create a Nuspec manifest.
         .EXAMPLE
-            ConvertTo-NuspecManifest -InputObject (Import-PowerShellDataFile -Path .\MyModule.psd1)
+            Import-PowerShellDataFile -Path .\MyModule.psd1 | ConvertTo-NuspecManifest
 
             Description
             -----------
             This example will import the PowerShell module manifest "MyModule.psd1" and map properties to create a Nuspec manifest.
             Import-PowerShellDataFile only works with PowerShell v5+, for v4 use Import-LocalizedData.
+        .EXAMPLE
+            Get-Module MyModule | ConvertTo-NuspecManifest
+
+            Description
+            -----------
+            This example will get the PowerShell module MyModule and map properties to create a Nuspec manifest.
+        .EXAMPLE
+            Test-ScriptFileInfo C:\MyScript.ps1 | ConvertTo-NuspecManifest
+
+            Description
+            -----------
+            This example will get the script file info of the PowerShell script MyScript.ps1 and map properties to create a Nuspec manifest.
         .NOTES
-            This version supports mostly PowerShell module manifest properties.
+            This version supports mostly PowerShell Module amd Scripts File Info properties.
         .LINK
             Get-NuspecProperty
         .LINK
             Set-NuspecProperty
+        .LINK
+            Resolve-NuspecProperty
         .LINK
             https://docs.microsoft.com/en-us/nuget/reference/nuspec
     #>
@@ -41,7 +55,7 @@ function ConvertTo-NuspecManifest
         [ValidateScript( {
                 try
                 {
-                    $_ | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+                    $_ | ConvertTo-Json | ConvertFrom-Json
                     $true
                 }
                 catch { throw "Could not convert input object type '$($InputObject.GetType().Name)'." }
@@ -56,38 +70,20 @@ function ConvertTo-NuspecManifest
         [xml] $Nuspec = Get-Content (Join-Path (Join-Path (Split-Path $PSScriptRoot -Parent) "template") "template.nuspec.xml")
         
         Write-Verbose "Input object type is '$($InputObject.GetType().Name)'"
-        $InputObject = $InputObject | ConvertTo-Json -Depth 100 | ConvertFrom-Json
+        $InputObject = $InputObject | ConvertTo-Json | ConvertFrom-Json
     
-        $InputObject | Get-Member -MemberType NoteProperty | ForEach-Object {
+        $InputObject | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($_.Name)" -and ($_.Name -notlike "Exported*") -and ($_.Name -notin "SessionState", "Definition") } | ForEach-Object {
             $Current = $_
-            Write-Verbose $Current
-            switch -Regex ($InputObject."$($Current.Name)".GetType().Name)
+            Write-Debug $Current
+            switch -Regex ($Current.Name)
             {
-                "string"
+                "PrivateData"
                 {
-                    Resolve-NuspecProperty -Name $Current.Name -Value $InputObject."$($Current.Name)" | Set-NuspecProperty -Nuspec $Nuspec -ErrorAction SilentlyContinue | Out-Null
-                }
-                "object"
-                {
-                    if ($Current.Name -eq "RequiredModules") { Add-NuspecDependency -InputObject $InputObject."$($Current.Name)" -Match $DependencyMatch -Nuspec $Nuspec | Out-Null }
-                    elseif ($Current.Name -eq "PrivateData")
-                    {
-                        if ($InputObject."$($Current.Name)".PSData.Tags) { Resolve-NuspecProperty -Name "Tags" -Value $InputObject."$($Current.Name)".PSData.Tags | Set-NuspecProperty -Nuspec $Nuspec | Out-Null }
-                        if ($InputObject."$($Current.Name)".PSData.LicenseUri) { Resolve-NuspecProperty -Name "LicenseUri" -Value $InputObject."$($Current.Name)".PSData.LicenseUri | Set-NuspecProperty -Nuspec $Nuspec | Out-Null }
-                        if ($InputObject."$($Current.Name)".PSData.ProjectUri) { Resolve-NuspecProperty -Name "ProjectUri" -Value $InputObject."$($Current.Name)".PSData.ProjectUri | Set-NuspecProperty -Nuspec $Nuspec | Out-Null }
-                        if ($InputObject."$($Current.Name)".PSData.IconUri) { Resolve-NuspecProperty -Name "IconUri" -Value $InputObject."$($Current.Name)".PSData.IconUri | Set-NuspecProperty -Nuspec $Nuspec | Out-Null }
-                        if ($InputObject."$($Current.Name)".PSData.ReleaseNotes) { Resolve-NuspecProperty -Name "ReleaseNotes" -Value $InputObject."$($Current.Name)".PSData.ReleaseNotes | Set-NuspecProperty -Nuspec $Nuspec | Out-Null }
-                        if ($InputObject."$($Current.Name)".PSData.Prerelease) { Resolve-NuspecProperty -Name "Prerelease" -Value $InputObject."$($Current.Name)".PSData.Prerelease | Set-NuspecProperty -Nuspec $Nuspec | Out-Null }
-                    }
-                    else
-                    {
-                        Write-Warning "Unsupported property '$Current.Name'"
+                    $InputObject."$($Current.Name)".PSData | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($Current.Name)".PSData."$($_.Name)" } | ForEach-Object {
+                        Resolve-NuspecProperty -Name $_.Name -Value $InputObject."$($Current.Name)".PSData."$($_.Name)" | Set-NuspecProperty -Nuspec $Nuspec -ErrorAction SilentlyContinue | Out-Null
                     }
                 }
-                default
-                {
-                    Write-Warning "Unsupported type '$($InputObject."$($Current.Name)".GetType().Name)'"
-                }
+                default { Resolve-NuspecProperty -Name $Current.Name -Value $InputObject."$($Current.Name)" | Set-NuspecProperty -Nuspec $Nuspec -ErrorAction SilentlyContinue | Out-Null }
             }
         }
 

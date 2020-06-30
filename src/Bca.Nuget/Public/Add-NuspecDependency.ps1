@@ -80,6 +80,13 @@ function Add-NuspecDependency
         $Match
     )
 
+    $Dependencies = $Nuspec.GetElementsByTagName("dependencies")
+    if (!$Dependencies.Name)
+    {
+        $FilesNode = $Nuspec.CreateElement("dependencies", $Nuspec.package.xmlns)
+        $Nuspec.GetElementsByTagName("metadata").AppendChild($FilesNode) | Out-Null
+    }
+
     switch ($PSCmdlet.ParameterSetName)
     {
         "FromValue"
@@ -105,11 +112,15 @@ function Add-NuspecDependency
             $InputObject | ForEach-Object {
                 if ($_.GetType().Name -eq "PSCustomObject")
                 {
-                    if ($_.ModuleName)
+                    if ($_.ModuleName -or $_.Name)
                     {
-                        $Id = $_.ModuleName
+                        $Version = "0.0.0"
+                        if ($_.ModuleName) { $Id = $_.ModuleName }
+                        if ($_.Name) { $Id = $_.Name }
+                        if ($_.Version) { $Version = $_.Version }
                         if ($_.ModuleVersion) { $Version = $_.ModuleVersion }
                         if ($_.RequiredVersion) { $Version = "[$($_.RequiredVersion)]" }
+                        if ($_.MaximumVersion) { $Version = "(,$($_.MaximumVersion)]" }
                     }
                     elseif ($_.id)
                     {
@@ -126,6 +137,14 @@ function Add-NuspecDependency
                     {
                         Write-Error -Message "Unsupported object format for value for dependency '$_' ($($_.GetType().Name))." -Category InvalidData -CategoryActivity $MyInvocation.MyCommand -TargetName $Name -TargetType "Nuspec Property" -Exception InvalidDataException
                     }
+                }
+                elseif ($_.GetType().Name -eq "Object[]")
+                {
+                    $_ | ForEach-Object { Add-NuspecDependency -Name $_ -Version "0.0.0" -Match $Match -Nuspec $Nuspec }
+                }
+                elseif ($_.GetType().Name -eq "string")
+                {
+                    $_.Replace(" ", "").Split(",") | ForEach-Object { Add-NuspecDependency -Name $_ -Version "0.0.0" -Match $Match -Nuspec $Nuspec }
                 }
                 else
                 {

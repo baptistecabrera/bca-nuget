@@ -7,10 +7,6 @@
         <authors>Authors</authors>
         <!--optional with default-->
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <dependencies></dependencies>
         <!--more at https://docs.microsoft.com/en-us/nuget/reference/nuspec-->
     </metadata>
-    <files>
-        <file src="tools\**" target="tools" exclude="**\*.nupkg" />
-    </files>
 </package>

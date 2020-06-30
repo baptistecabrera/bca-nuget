@@ -28,7 +28,7 @@ function Set-NuspecLicense
     [CmdLetBinding()]
     param(
         [Parameter(Mandatory = $true)]
-        # [ValidateSet("file", "expression")]
+        [ValidateSet("file", "expression")]
         [ValidateSet("file")]
         [string] $Type,
         [Parameter(Mandatory = $true)]
@@ -54,17 +54,17 @@ function Set-NuspecLicense
 
             switch ($Type)
             {
-                # "expression"
-                # {
-                #     if (!(Test-SpdxLicenseExpression -Expression $Value -FsfOrOsi -ErrorAction Continue)) { Write-Error -Message "Expression '$Value' is not a valid SPDX license expression." -Category InvalidData -CategoryActivity $MyInvocation.MyCommand -TargetName $Value -TargetType "SPDXLicenseExpression" -Exception InvalidDataException }
-                #     else
-                #     {
-                #         $License.SetAttribute("type", $Type.ToLower())
-                #         $License.set_InnerText($Value)
-                #         Write-Verbose "Setting '$Value' as the license expression."
-                #         $Nuspec.GetElementsByTagName("metadata").AppendChild($License) | Out-Null
-                #     }
-                # }
+                "expression"
+                {
+                    if (!(Test-SpdxLicenseExpression -Expression $Value -FsfOrOsi -ErrorAction Continue)) { Write-Error -Message "Expression '$Value' is not a valid SPDX license expression." -Category InvalidData -CategoryActivity $MyInvocation.MyCommand -TargetName $Value -TargetType "SPDXLicenseExpression" -Exception InvalidDataException }
+                    else
+                    {
+                        $License.SetAttribute("type", $Type.ToLower())
+                        $License.set_InnerText($Value)
+                        Write-Verbose "Setting '$Value' as the license expression."
+                        $Nuspec.GetElementsByTagName("metadata").AppendChild($License) | Out-Null
+                    }
+                }
                 "file"
                 {
                     $File = Split-Path $Value -Leaf
