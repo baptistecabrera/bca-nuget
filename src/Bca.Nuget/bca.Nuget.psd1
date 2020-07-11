@@ -12,7 +12,7 @@
     RootModule      = 'Bca.Nuget'
 
     # Version number of this module.
-    ModuleVersion   = '0.0.2'
+    ModuleVersion   = '0.0.6'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -27,7 +27,7 @@
     CompanyName     = 'Bca'
 
     # Copyright statement for this module
-    Copyright       = '© 2020 Bca. All rights reserved.'
+    Copyright       = '(c) 2020 Bca. All rights reserved.'
 
     # Description of the functionality provided by this module
     Description     = 'PowerShell module to create and manage NuGet packages.'
@@ -51,7 +51,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    # RequiredModules = @('Pscx', @{ ModuleName = "Bca.Spdx" ; ModuleVersion = "0.0.4" })
+    RequiredModules = @(@{ ModuleName = "Bca.Spdx" ; ModuleVersion = "0.0.8" })
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -101,13 +101,32 @@
             # LicenseUri = ''
 
             # A URL to the main website for this project.
-            # ProjectUri = ''
+            ProjectUri   = 'https://github.com/bapcabrera/bca-nuget'
 
             # A URL to an icon representing this module.
             IconUri    = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = ''
+            ReleaseNotes = '0.0.6:
+- ConvertTo-NuspecManifest: Added support for PowerShell Script Info objects.
+
+0.0.5:
+- Bug fixes.
+
+0.0.4:
+- ConvertTo-NuspecManifest: Added support for Module objects.
+
+0.0.3:
+- Added files support (Add-NuspecContentFile and Add-NuspecFile);
+- Set-NuspecLicense: New function that supports either SPDX license or file;
+- Added a dependency on module Bca.Spdx.
+
+0.0.2:
+- Added new function for Nuspec properties (Get-NuspecProperty, Set-NuspecProperty, Resolve-NuspecProperty);
+- ConvertTo-NuspecManifest: Moved a great deal of logic in Resolve-NuspecProperty.
+
+0.0.1:
+- First version.'
 
             # Prerelease of this module
             Prerelease = ""

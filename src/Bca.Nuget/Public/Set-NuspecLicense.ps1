@@ -29,7 +29,6 @@ function Set-NuspecLicense
     param(
         [Parameter(Mandatory = $true)]
         [ValidateSet("file", "expression")]
-        [ValidateSet("file")]
         [string] $Type,
         [Parameter(Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
@@ -83,7 +82,7 @@ function Set-NuspecLicense
             }
 
         }
-        else { Write-Warning "License already present, use Force switch to override." }
+        else { Write-Warning "License already present ($($License.InnerText)), use Force switch to override." }
         $Nuspec
     }
     catch
