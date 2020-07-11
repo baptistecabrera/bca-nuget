@@ -6,12 +6,12 @@ Describe "Module" {
             $Result = $true
         }
         catch { $Result = $false }
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
     
     It "Checking exported commands count." {
         $Commands = Get-Command -Module Bca.Nuget
-        $Commands.Count | Should BeGreaterThan 0
+        $Commands.Count | Should -BeGreaterThan 0
     }
 }
 
@@ -58,138 +58,147 @@ Describe "ConvertTo-NuspecManifest" {
         "ExternalModule1"
     }
     
-    It "Converting PS Module Manifest to Nuspec" {
+    It "Converting PS Module Manifest to Nuspec ($($PSManifest))" {
         try
         {
+            $Result = $true
             (Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest)
-            $Result = $true
         }
         catch { $Result = $false }
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
 
-    It "Testing generated Nuspec file" {
+    It "Testing generated Nuspec file ($NuspecManifest)" {
         $Result = Test-Path $NuspecManifest
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
 
-    It "Converting PS Module Info to Nuspec" {
+    It "Converting PS Module Info to Nuspec (Bca.Nuget)" {
         try
         {
-            (Get-Module -Name Bca.Nuget | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest2)
             $Result = $true
+            (Get-Module -Name Bca.Nuget | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest2)
         }
         catch { $Result = $false }
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
 
-    It "Testing generated Nuspec file" {
+    It "Testing generated Nuspec file ($NuspecManifest2)" {
         $Result = Test-Path $NuspecManifest2
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
     
     It "Testing both generated module Nuspec file" {
         $Result = ((Get-Content $NuspecManifest) -join "`r`n") -eq ((Get-Content $NuspecManifest2) -join "`r`n")
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
 
-    It "Converting Script File Info to Nuspec" {
+    It "Converting Script File Info to Nuspec ($ScriptPath)" {
         try
         {
+            $Result = $true
             New-ScriptFileInfo @ScriptInfo
             (Test-ScriptFileInfo -Path $ScriptPath | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($ScriptNuspecManifest)
-            $Result = $true
         }
         catch { $Result = $false }
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
 
-    It "Testing generated Nuspec file" {
+    It "Testing generated Nuspec file ($ScriptNuspecManifest)" {
         $Result = Test-Path $ScriptNuspecManifest
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
 }
 
 Describe "Get-NuspecProperty" {
     $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
     $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
-    $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+
+    It "$NuspecManifest" {
+        Test-Path $NuspecManifest | Should -Be $true
+    }
 
     It "Getting Id by Path" {
         $Id = Get-NuspecProperty -Name "id" -Path $NuspecManifest
-        $Id.Name | Should BeExactly "id"
-        $Id.Value | Should BeExactly "Bca.Nuget"
+        $Id.Name | Should -BeExactly "id"
+        $Id.Value | Should -BeExactly "Bca.Nuget"
     }
 
     It "Getting Id by Nuspec" {
+        $Nuspec = [xml](Get-Content -Path $NuspecManifest)
         $Id = Get-NuspecProperty -Name "id" -Nuspec $Nuspec
-        $Id.Name | Should BeExactly "id"
-        $Id.Value | Should BeExactly "Bca.Nuget"
+        $Id.Name | Should -BeExactly "id"
+        $Id.Value | Should -BeExactly "Bca.Nuget"
     }
 
     It "Getting script Title" {
         $Id = Get-NuspecProperty -Name "title" -Path $ScriptNuspecManifest
-        $Id.Name | Should BeExactly "title"
-        $Id.Value | Should BeExactly "TestScript"
+        $Id.Name | Should -BeExactly "title"
+        $Id.Value | Should -BeExactly "TestScript"
     }
 }
 
 Describe "Set-NuspecLicense" {
     $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-    $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+    
 
     It "Setting license from Expression" {
         try 
         {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
         }
         catch
         {
             $Nuspec = [xml](Get-Content -Path $NuspecManifest)
         }
-        $Nuspec.package.metadata.license.type | Should BeExactly "expression"
-        $Nuspec.package.metadata.license.InnerText | Should BeExactly "MIT"
+        $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
+        $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT"
     }
 
     It "Setting license from Expression (!Force) - Should display a warning above ^" {
         try 
         {
-            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND AAL" -Nuspec $Nuspec
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
+            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND ALL" -Nuspec $Nuspec
         }
         catch
         {
             $Nuspec = [xml](Get-Content -Path $NuspecManifest)
         }
-        $Nuspec.package.metadata.license.type | Should BeExactly "expression"
-        $Nuspec.package.metadata.license.InnerText | Should BeExactly "MIT"
+        $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
+        $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT"
     }
 
     It "Setting license from Expression (Force)" {
         try 
         {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND AAL" -Nuspec $Nuspec -Force
         }
         catch
         {
             $Nuspec = [xml](Get-Content -Path $NuspecManifest)
         }
-        $Nuspec.package.metadata.license.type | Should BeExactly "expression"
-        $Nuspec.package.metadata.license.InnerText | Should BeExactly "MIT AND AAL"
+        $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
+        $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT AND AAL"
     }
 
     It "Setting license from File" {
         try 
         {
             Write-Host -ForegroundColor Cyan "This test should also confirm that Add-NuspecFile is working as expected."
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             $Nuspec = Set-NuspecLicense -Type file -Value "\License.txt" -Nuspec $Nuspec -Force
         }
         catch
         {
             $Nuspec = [xml](Get-Content -Path $NuspecManifest)
         }
-        $Nuspec.package.metadata.license.type | Should BeExactly "file"
-        $Nuspec.package.metadata.license.InnerText | Should BeExactly "License.txt"
-        $Nuspec.package.files.file | Where-Object { $_.src -eq "\License.txt" } | Should Be $true
+        $Nuspec.package.metadata.license.type | Should -BeExactly "file"
+        $Nuspec.package.metadata.license.InnerText | Should -BeExactly "License.txt"
+        ($Nuspec.package.files.file | Where-Object { $_.src -eq "\License.txt" }).src | Should -BeExactly "\License.txt"
     }
 
     It "Setting license from Expression (not approved) - Should display an exception above ^" {
@@ -202,7 +211,7 @@ Describe "Set-NuspecLicense" {
         {
             $Result = $true
         }
-        $Result | Should Be $true
+        $Result | Should -Be $true
     }
 }
 
@@ -210,30 +219,29 @@ Describe "New-NuGetPackage" {
     Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
 
     $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-    $Nuspec = [xml](Get-Content -Path $NuspecManifest)
     $PackageFile = Join-Path (Split-Path $NuspecManifest -Parent) "$((Get-NuspecProperty -Name id -Nuspec $Nuspec).Value).$((Get-NuspecProperty -Name version -Nuspec $Nuspec).Value).nupkg"
 
     It "Creating package from Nuspec" {
         try
         {
-            $Result = $false
+            $Result = $true
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             if (Test-Path $PackageFile) { Remove-Item -Path $PackageFile -Force }
             New-NuGetPackage -Manifest $NuspecManifest -OutputPath (Split-Path $NuspecManifest -Parent) -Parameters @{ "NoDefaultExcludes" = $true } -ErrorAction Stop | Out-Null
-            $Result = $true
         }
         catch
         {
             $Result = $false
         }
-        $Result | Should Be $true
-        (Test-Path $PackageFile) | Should Be $true
+        $Result | Should -Be $true
+        (Test-Path $PackageFile) | Should -Be $true
     }
 }
 
 Describe "Cleanup" {
     $Directory = Join-Path $env:TEMP "Bca.Nuget"
     
-    It "Removing test directory" {
-        Remove-Item -Path $Directory -Force -Recurse
+    It "Removing test directory ($Directory)" {
+        Remove-Item -Path (Join-Path $env:TEMP "Bca.Nuget") -Force -Recurse
     }
 }

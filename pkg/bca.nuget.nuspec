@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <!--mandatory-->
+    <id>Bca.Nuget</id>
+    <version>0.0.6</version>
+    <authors>Baptiste Cabrera</authors>
+    <!--optional with default-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <!--more at https://docs.microsoft.com/en-us/nuget/reference/nuspec-->
+    <owners>Bca</owners>
+    <copyright>(c) 2020 Bca. All rights reserved.</copyright>
+    <description>PowerShell module to create and manage NuGet packages.</description>
+    <projectUrl>https://github.com/bapcabrera/bca-nuget</projectUrl>
+    <releaseNotes>0.0.6:
+- ConvertTo-NuspecManifest: Added support for PowerShell Script Info objects.
+
+0.0.5:
+- Bug fixes.
+
+0.0.4:
+- ConvertTo-NuspecManifest: Added support for Module objects.
+
+0.0.3:
+- Added files support (Add-NuspecContentFile and Add-NuspecFile);
+- Set-NuspecLicense: New function that supports either SPDX license or file;
+- Added a dependency on module Bca.Spdx.
+
+0.0.2:
+- Added new function for Nuspec properties (Get-NuspecProperty, Set-NuspecProperty, Resolve-NuspecProperty);
+- ConvertTo-NuspecManifest: Moved a great deal of logic in Resolve-NuspecProperty.
+
+0.0.1:
+- First version.</releaseNotes>
+    <tags>Package Packaging PackageManager NuGet</tags>
+    <dependencies>
+      <dependency id="Bca.Spdx" version="0.0.8" />
+    </dependencies>
+    <title>Bca.Nuget</title>
+  </metadata>
+</package>
