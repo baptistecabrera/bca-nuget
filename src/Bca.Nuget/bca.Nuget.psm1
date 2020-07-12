@@ -16,3 +16,5 @@ foreach ($File in @($Public + $Private))
 }
 
 Export-ModuleMember -Function $Public.BaseName -Variable * -Alias *
+
+Install-NuGet
