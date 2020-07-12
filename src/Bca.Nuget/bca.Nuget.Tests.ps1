@@ -204,19 +204,6 @@ Describe "Set-NuspecLicense" {
         $Nuspec.package.metadata.license.InnerText | Should -BeExactly "License.txt"
         ($Nuspec.package.files.file | Where-Object { $_.src -eq "\License.txt" }).src | Should -BeExactly "\License.txt"
     }
-
-    It "Setting license from Expression (not approved) - Should display an exception above ^" {
-        try 
-        {
-            $Result = $false
-            Set-NuspecLicense -Type expression -Value "ADSL" -Nuspec $Nuspec -Force -ErrorAction Stop | Out-Null
-        }
-        catch
-        {
-            $Result = $true
-        }
-        $Result | Should -Be $true
-    }
 }
 
 Describe "New-NuGetPackage" {
