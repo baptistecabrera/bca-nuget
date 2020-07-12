@@ -6,7 +6,7 @@ _Bca.NuGet_ is a PowerShell module used to manage NuGet packages, but more impor
 
 ## Disclaimer
 
-- _Bca.NuGet_ embeds NuGet executable with version `5.6.0`, but a future version will allow to specify another version or dynamically find it.
+- _Bca.NuGet_ will install the latest version of _NuGet_ once at module import, but you can use the command `Install-NuGet -Force` to update it. A future version will allow to specify another version or dynamically find it.
 - _Bca.NuGet_ has been created to answer my needs to streamline my package automation, but I provide it to people who may need such a tool.
 - It may contain bugs or lack some features, in this case, feel free to open an issue, and I'll manage it as best as I can.
 - This _GitHub_ repository is not the primary one, see transparency for more information.
@@ -43,7 +43,9 @@ $Nuspec.Save("C:\MyScript.nuspec")
 
 ### Package
 
-_Bca.NuGet_ is available as a package from _[PowerShell Gallery](https://www.powershellgallery.com/)_, _[NuGet](https://www.nuget.org/)_ and _[Chocolatey](https://chocolatey.org/)_, please refer to each specific plateform on how to install the package.
+_Bca.NuGet_ is available as a package from _[PowerShell Gallery](https://www.powershellgallery.com/)_, _[NuGet](https://www.nuget.org/)_ and _[Chocolatey](https://chocolatey.org/)_*, please refer to each specific plateform on how to install the package.
+
+\* Chocolatey feed may not be up to date as there are manual verifications for each packages.
 
 ### Manually
 
