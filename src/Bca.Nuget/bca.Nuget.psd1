@@ -12,7 +12,7 @@
     RootModule      = 'Bca.Nuget'
 
     # Version number of this module.
-    ModuleVersion   = '0.0.7'
+    ModuleVersion   = '0.0.8'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -107,7 +107,11 @@
             IconUri    = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = '0.0.7:
+            ReleaseNotes = '0.0.8:
+- Install-NuGet: Fixed if bin folder is not present (as it is removed if empty when packaged);
+- Updated tests.
+
+0.0.7:
 - Install-NuGet: New function that will install NuGet if not present when importing the module (can be used to update with Force switch).
 - Update-NuGet: New function that will update NuGet to the latest version.
 

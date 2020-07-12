@@ -26,6 +26,8 @@ function Install-NuGet
         $NuGetPath = Get-NuGetPath
         if (!(Test-Path $NuGetPath) -or $Force)
         {
+            $ParentDirectory = Split-Path -Path $NuGetPath -Parent
+            if (!(Test-Path $ParentDirectory)) { New-Item -Path $ParentDirectory -ItemType Directory -Force | Out-Null }
             (New-Object System.Net.WebClient).DownloadFile("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe", $NuGetPath)
         }
     }

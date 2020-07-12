@@ -1,8 +1,10 @@
 Describe "Module" {
+    BeforeAll { $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1 }
+
     It "Importing module locally." {
         try
         {
-            Import-Module (Join-Path $PSScriptRoot Bca.Nuget.psd1) -Force
+            Import-Module $PSManifest -Force
             $Result = $true
         }
         catch { $Result = $false }
@@ -19,61 +21,64 @@ Describe "ConvertTo-NuspecManifest" {
     Write-Host -ForegroundColor Cyan "These tests should also confirm that Resolve-NuspecProperty, Set-NuspecProperty and Add-NuspecDependency are working as expected."
     Write-Host -ForegroundColor Cyan "Warning(s) on unmatched properties are expected."
 
-    $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
-    $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-    $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget2.nuspec"
-    $ScriptPath = Join-Path $env:TEMP "Bca.Nuget\TestScript.ps1"
-    $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
-    if (!(Test-Path (Split-Path $NuspecManifest -Parent))) { New-Item -Path (Split-Path $NuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
-    if (!(Test-Path (Split-Path $NuspecManifest2 -Parent))) { New-Item -Path (Split-Path $NuspecManifest2 -Parent) -ItemType Directory -Force | Out-Null }
-    if (!(Test-Path (Split-Path $ScriptNuspecManifest -Parent))) { New-Item -Path (Split-Path $ScriptNuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
+    BeforeAll {
+        $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
+        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+        $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget2.nuspec"
+        $ScriptPath = Join-Path $env:TEMP "Bca.Nuget\TestScript.ps1"
+        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
+        if (!(Test-Path (Split-Path $NuspecManifest -Parent))) { New-Item -Path (Split-Path $NuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
+        if (!(Test-Path (Split-Path $NuspecManifest2 -Parent))) { New-Item -Path (Split-Path $NuspecManifest2 -Parent) -ItemType Directory -Force | Out-Null }
+        if (!(Test-Path (Split-Path $ScriptNuspecManifest -Parent))) { New-Item -Path (Split-Path $ScriptNuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
+        
 
-    $ScriptInfo = @{
-        Path                       = $ScriptPath
-        Version                    = "1.0.0"
-        Author                     = "pattif@contoso.com"
-        Description                = "My new script file test"
-        CompanyName                = "Contoso Corporation"
-        Copyright                  = "2019 Contoso Corporation. All rights reserved."
-        ExternalModuleDependencies = "ff", "bb"
-        RequiredScripts            = "Start-WFContosoServer", "Stop-ContosoServerScript"
-        ExternalScriptDependencies = "Stop-ContosoServerScript"
-        Tags                       = @("Tag1", "Tag2", "Tag3")
-        ProjectUri                 = "https://contoso.com"
-        LicenseUri                 = "https://contoso.com/License"
-        IconUri                    = "https://contoso.com/Icon"
-        PassThru                   = $True
-        ReleaseNotes               = @("Contoso script now supports the following features:",
-            "Feature 1",
-            "Feature 2",
-            "Feature 3",
-            "Feature 4",
-            "Feature 5")
-        RequiredModules            =
-        "1",
-        "2",
-        "RequiredModule1",
-        @{ModuleName = "RequiredModule2"; ModuleVersion = "1.0" },
-        @{ModuleName = "RequiredModule3"; RequiredVersion = "2.0" },
-        "ExternalModule1"
+        $ScriptInfo = @{
+            Path                       = $ScriptPath
+            Version                    = "1.0.0"
+            Author                     = "pattif@contoso.com"
+            Description                = "My new script file test"
+            CompanyName                = "Contoso Corporation"
+            Copyright                  = "2019 Contoso Corporation. All rights reserved."
+            ExternalModuleDependencies = "ff", "bb"
+            RequiredScripts            = "Start-WFContosoServer", "Stop-ContosoServerScript"
+            ExternalScriptDependencies = "Stop-ContosoServerScript"
+            Tags                       = @("Tag1", "Tag2", "Tag3")
+            ProjectUri                 = "https://contoso.com"
+            LicenseUri                 = "https://contoso.com/License"
+            IconUri                    = "https://contoso.com/Icon"
+            PassThru                   = $True
+            ReleaseNotes               = @("Contoso script now supports the following features:",
+                "Feature 1",
+                "Feature 2",
+                "Feature 3",
+                "Feature 4",
+                "Feature 5")
+            RequiredModules            =
+            "1",
+            "2",
+            "RequiredModule1",
+            @{ModuleName = "RequiredModule2"; ModuleVersion = "1.0" },
+            @{ModuleName = "RequiredModule3"; RequiredVersion = "2.0" },
+            "ExternalModule1"
+        }
     }
     
-    It "Converting PS Module Manifest to Nuspec ($($PSManifest))" {
+    It "Converting PS Module Manifest to Nuspec" {
         try
         {
-            $Result = $true
             (Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest)
+            $Result = $true
         }
-        catch { $Result = $false }
+        catch { Write-Error $_ ;$Result = $false }
         $Result | Should -Be $true
     }
 
-    It "Testing generated Nuspec file ($NuspecManifest)" {
+    It "Testing generated Nuspec file" {
         $Result = Test-Path $NuspecManifest
         $Result | Should -Be $true
     }
 
-    It "Converting PS Module Info to Nuspec (Bca.Nuget)" {
+    It "Converting PS Module Info to Nuspec" {
         try
         {
             $Result = $true
@@ -83,7 +88,7 @@ Describe "ConvertTo-NuspecManifest" {
         $Result | Should -Be $true
     }
 
-    It "Testing generated Nuspec file ($NuspecManifest2)" {
+    It "Testing generated Nuspec file" {
         $Result = Test-Path $NuspecManifest2
         $Result | Should -Be $true
     }
@@ -93,7 +98,7 @@ Describe "ConvertTo-NuspecManifest" {
         $Result | Should -Be $true
     }
 
-    It "Converting Script File Info to Nuspec ($ScriptPath)" {
+    It "Converting Script File Info to Nuspec" {
         try
         {
             $Result = $true
@@ -104,18 +109,16 @@ Describe "ConvertTo-NuspecManifest" {
         $Result | Should -Be $true
     }
 
-    It "Testing generated Nuspec file ($ScriptNuspecManifest)" {
+    It "Testing generated Nuspec file" {
         $Result = Test-Path $ScriptNuspecManifest
         $Result | Should -Be $true
     }
 }
 
 Describe "Get-NuspecProperty" {
-    $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-    $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
-
-    It "$NuspecManifest" {
-        Test-Path $NuspecManifest | Should -Be $true
+    BeforeAll {
+        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
     }
 
     It "Getting Id by Path" {
@@ -139,13 +142,15 @@ Describe "Get-NuspecProperty" {
 }
 
 Describe "Set-NuspecLicense" {
-    $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+    BeforeAll {
+        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+        $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+    }
     
 
     It "Setting license from Expression" {
         try 
         {
-            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
         }
         catch
@@ -159,7 +164,7 @@ Describe "Set-NuspecLicense" {
     It "Setting license from Expression (!Force) - Should display a warning above ^" {
         try 
         {
-            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+            # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
             $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND ALL" -Nuspec $Nuspec
         }
@@ -174,7 +179,7 @@ Describe "Set-NuspecLicense" {
     It "Setting license from Expression (Force)" {
         try 
         {
-            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+            # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND AAL" -Nuspec $Nuspec -Force
         }
         catch
@@ -189,7 +194,6 @@ Describe "Set-NuspecLicense" {
         try 
         {
             Write-Host -ForegroundColor Cyan "This test should also confirm that Add-NuspecFile is working as expected."
-            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             $Nuspec = Set-NuspecLicense -Type file -Value "\License.txt" -Nuspec $Nuspec -Force
         }
         catch
@@ -200,32 +204,21 @@ Describe "Set-NuspecLicense" {
         $Nuspec.package.metadata.license.InnerText | Should -BeExactly "License.txt"
         ($Nuspec.package.files.file | Where-Object { $_.src -eq "\License.txt" }).src | Should -BeExactly "\License.txt"
     }
-
-    It "Setting license from Expression (not approved) - Should display an exception above ^" {
-        try 
-        {
-            $Result = $false
-            Set-NuspecLicense -Type expression -Value "ADSL" -Nuspec $Nuspec -Force -ErrorAction Stop | Out-Null
-        }
-        catch
-        {
-            $Result = $true
-        }
-        $Result | Should -Be $true
-    }
 }
 
 Describe "New-NuGetPackage" {
     Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
 
-    $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-    $PackageFile = Join-Path (Split-Path $NuspecManifest -Parent) "$((Get-NuspecProperty -Name id -Nuspec $Nuspec).Value).$((Get-NuspecProperty -Name version -Nuspec $Nuspec).Value).nupkg"
+    BeforeAll {
+        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+        $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+    }
 
     It "Creating package from Nuspec" {
         try
         {
             $Result = $true
-            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+            $PackageFile = Join-Path (Split-Path $NuspecManifest -Parent) "$((Get-NuspecProperty -Name id -Nuspec $Nuspec).Value).$((Get-NuspecProperty -Name version -Nuspec $Nuspec).Value).nupkg"
             if (Test-Path $PackageFile) { Remove-Item -Path $PackageFile -Force }
             New-NuGetPackage -Manifest $NuspecManifest -OutputPath (Split-Path $NuspecManifest -Parent) -Parameters @{ "NoDefaultExcludes" = $true } -ErrorAction Stop | Out-Null
         }
@@ -239,9 +232,13 @@ Describe "New-NuGetPackage" {
 }
 
 Describe "Cleanup" {
-    $Directory = Join-Path $env:TEMP "Bca.Nuget"
+    BeforeAll { $Directory = Join-Path $env:TEMP "Bca.Nuget" }
     
     It "Removing test directory ($Directory)" {
-        Remove-Item -Path (Join-Path $env:TEMP "Bca.Nuget") -Force -Recurse
+        Remove-Item -Path $Directory -Force -Recurse
+    }
+
+    It "Removing Module" {
+        Remove-Module -Name Bca.Nuget -Force
     }
 }
