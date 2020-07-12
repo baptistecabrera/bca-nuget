@@ -109,6 +109,7 @@
             # ReleaseNotes of this module
             ReleaseNotes = '0.0.7:
 - Install-NuGet: New function that will install NuGet if not present when importing the module (can be used to update with Force switch).
+- Update-NuGet: New function that will update NuGet to the latest version.
 
 0.0.6:
 - ConvertTo-NuspecManifest: Added support for PowerShell Script Info objects.

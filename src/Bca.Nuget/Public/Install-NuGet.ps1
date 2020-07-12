@@ -5,6 +5,8 @@ function Install-NuGet
             Installs NuGet.exe.
         .DESCRIPTION
             Installs NuGet.exe.
+        .PARAMETER Force
+            A switch specifying whether or not to force the install if already installed.
         .EXAMPLE
             Install-NuGet
 
