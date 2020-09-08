@@ -59,4 +59,4 @@ Accepts an object containing the Name and Value as an input from the pipeline.
 **System.Xml.XmlDocument**
 Returns an XmlDocument containing the manifest.
 ## Related Links
-- Set-NuspecProperty
+- [Set-NuspecProperty](Set-NuspecProperty.md)

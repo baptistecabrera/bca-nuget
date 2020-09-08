@@ -62,5 +62,5 @@ An XmlDocument containing the Nuspec manifest.
 **System.Management.Automation.PSCustomObject**
 Returns a PSCustomObject containing the name and value of the mapped property.
 ## Related Links
-- Set-NuspecProperty
-- Resolve-NuspecProperty
+- [Set-NuspecProperty](Set-NuspecProperty.md)
+- [Resolve-NuspecProperty](Resolve-NuspecProperty.md)

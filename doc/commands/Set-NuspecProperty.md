@@ -108,5 +108,5 @@ Accepts an object containing the Name and Value as an input from the pipeline.
 **System.Xml.XmlDocument**
 Returns an XmlDocument containing the manifest.
 ## Related Links
-- Resolve-NuspecProperty
-- Add-NuspecDependency
+- [Resolve-NuspecProperty](Resolve-NuspecProperty.md)
+- [Add-NuspecDependency](Add-NuspecDependency.md)

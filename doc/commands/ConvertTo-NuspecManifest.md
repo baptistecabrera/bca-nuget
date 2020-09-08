@@ -74,6 +74,6 @@ Returns an XmlDocument containing the manifest.
 ## Notes
 This version supports mostly PowerShell Module amd Scripts File Info properties.
 ## Related Links
-- Get-NuspecProperty
-- Set-NuspecProperty
-- Resolve-NuspecProperty
+- [Get-NuspecProperty](Get-NuspecProperty.md)
+- [Set-NuspecProperty](Set-NuspecProperty.md)
+- [Resolve-NuspecProperty](Resolve-NuspecProperty.md)

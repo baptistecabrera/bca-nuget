@@ -69,4 +69,4 @@ Will use 'Get-NuspecSchema' if omitted.
 **System.Boolean**
 Returns a boolean specifying whether or not the manifest is conform to teh schema.
 ## Related Links
-- Get-NuspecSchema
+- [Get-NuspecSchema](Get-NuspecSchema.md)
