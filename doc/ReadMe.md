@@ -1,4 +1,4 @@
-# Bca.Nuget `0.0.8`
+# Bca.Nuget `0.0.9`
 Tags: `NuGet` `Package` `PackageManager` `Packaging`
 
 PowerShell module to create and manage NuGet packages.
