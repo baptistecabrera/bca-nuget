@@ -92,19 +92,29 @@
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData     = @{
 
-        PSData = @{
+        License    = "GPL-3.0-or-later"
+
+        Chocolatey = @{
+            docsUrl          = "https://github.com/baptistecabrera/bca-nuget/doc"
+            mailingListUrl   = "https://github.com/baptistecabrera/bca-nuget/issues"
+            bugTrackerUrl    = "https://github.com/baptistecabrera/bca-nuget/issues"
+            packageSourceUrl = "https://github.com/baptistecabrera/bca-nuget/src"
+            projectSourceUrl = "https://github.com/baptistecabrera/bca-nuget/src"
+        }
+
+        PSData     = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags       = @('Package', 'Packaging', 'PackageManager', 'NuGet')
+            Tags         = @('Package', 'Packaging', 'PackageManager', 'NuGet')
 
             # A URL to the license for this module.
-            # LicenseUri = ''
+            LicenseUri   = 'https://spdx.org/licenses/GPL-3.0-or-later.html'
 
             # A URL to the main website for this project.
-            ProjectUri   = 'https://github.com/bapcabrera/bca-nuget'
+            ProjectUri   = 'https://github.com/baptistecabrera/bca-nuget'
 
             # A URL to an icon representing this module.
-            IconUri    = ''
+            IconUri      = ''
 
             # ReleaseNotes of this module
             ReleaseNotes = '0.0.8:
@@ -137,7 +147,7 @@
 - First version.'
 
             # Prerelease of this module
-            Prerelease = ""
+            Prerelease   = ""
         } # End of PSData hashtable
 
     } # End of PrivateData hashtable

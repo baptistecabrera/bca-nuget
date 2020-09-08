@@ -39,6 +39,9 @@ $Nuspec = Test-ScriptFileInfo C:\MyScript.ps1 | ConvertTo-NuspecManifest
 $Nuspec.Save("C:\MyScript.nuspec")
 ```
 
+## Documentation
+Find extended documentation [at this page](docs/ReadMe.md).
+
 ## How to install
 
 ### Package

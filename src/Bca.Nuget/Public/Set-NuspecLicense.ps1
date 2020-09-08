@@ -12,7 +12,7 @@ function Set-NuspecLicense
         .PARAMETER Nuspec
             An XmlDocument containing the Nuspec manifest.
         .PARAMETER Force
-            A switch sepecifying whether or not to override license if it already exists.
+            A switch sepecifying whether or not to override license and/or licenseUrl if it already exists.
         .INPUTS
             System.Object
             Accepts an object containing the Name and Value as an input from the pipeline.
@@ -44,6 +44,11 @@ function Set-NuspecLicense
         $License = $Nuspec.GetElementsByTagName("license")
         if (!$License.Name -or $Force)
         {
+            if ($Nuspec.GetElementsByTagName("licenseUrl"))
+            {
+                Write-Verbose "Removing existing licenseUrl node."
+                $Nuspec.package.metadata.RemoveChild($Nuspec.package.metadata.licenseUrl) | Out-Null
+            }
             if ($License.Name)
             {
                 Write-Verbose "Removing existing license node."
