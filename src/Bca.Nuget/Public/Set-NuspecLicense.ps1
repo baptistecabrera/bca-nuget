@@ -41,18 +41,22 @@ function Set-NuspecLicense
 
     try
     {
-        $License = $Nuspec.GetElementsByTagName("license")
+        $NameSpace = New-Object System.Xml.XmlNamespaceManager($Nuspec.NameTable)
+        $NameSpace.AddNamespace("ns", $Nuspec.DocumentElement.xmlns)
+        
+        $License = $nuspec.SelectSingleNode("//ns:license", $NameSpace)
+        $LicenseUrl = $nuspec.SelectSingleNode("//ns:licenseUrl", $NameSpace)
         if (!$License.Name -or $Force)
         {
-            if ($Nuspec.GetElementsByTagName("licenseUrl"))
+            if ($LicenseUrl -and $Force)
             {
                 Write-Verbose "Removing existing licenseUrl node."
-                $Nuspec.package.metadata.RemoveChild($Nuspec.package.metadata.licenseUrl) | Out-Null
+                $Nuspec.package.metadata.RemoveChild($LicenseUrl) | Out-Null
             }
             if ($License.Name)
             {
                 Write-Verbose "Removing existing license node."
-                $Nuspec.package.metadata.RemoveChild($Nuspec.package.metadata.license) | Out-Null
+                $Nuspec.package.metadata.RemoveChild($License) | Out-Null
             }
             $License = $Nuspec.CreateElement("license", $Nuspec.package.xmlns)
 
