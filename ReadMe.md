@@ -45,7 +45,7 @@ $Nuspec.Save("C:\MyScript.nuspec")
 
 _Bca.NuGet_ is available as a package from _[PowerShell Gallery](https://www.powershellgallery.com/)_, _[NuGet](https://www.nuget.org/)_ and _[Chocolatey](https://chocolatey.org/)_*, please refer to each specific plateform on how to install the package.
 
-\* Chocolatey feed may not be up to date as there are manual verifications for each packages.
+\* Availability on Chocolatey is subject to approval.
 
 ### Manually
 
@@ -57,14 +57,23 @@ I'll advise you use a path with the version, that can be found in the module man
 
 _Please not that to date I am the only developper for this module._
 
-All code is stored on a private Git repository on Azure DevOps.
+- All code is primarily stored on a private Git repository on Azure DevOps;
+- Issues opened in GitHub create a bug in Azure DevOps;
+- All pushes made in GitHub are synced to Azure DevOps (that includes all branches except `master`);
+- When a GitHub Pull Request is submitted, it is analyzed and merged in `develop` on GitHub, then synced to Azure DevOps that will trigger the CI;
+- A Pull Request is then submitted in Azure DevOps to merge `develop` to `master`, it runs the CI again;
+- Once merged to `master`, the CI is one last time, but this time it will create a Chocolatey and a NuGet packages that are pushed on private Azure DevOps Artifacts feeds;
+- If the CI succeeds and the packages are well pushed, the CD is triggered.
 
-When a pull request is submitted, it runs an Azure DevOps build pipeline that tests the module with _[Pester](https://pester.dev/)_ tests and runs the _[PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)_.
+### CI
 
-Once merged, the build pipeline is run again, but this time it will:
-- Mirror the repository to _GitHub_;
-- Create a Chocolatey and a NuGet packages that are pushed on private Azure DevOps Artifacts feeds.
+The CI is an Azure DevOps build pipeline that will:
+- Test the module with _[Pester](https://pester.dev/)_ tests;
+- Run the _[PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)_;
+- Mirror the repository to GitHub
 
-If the build succeeds and the packages are well pushed, an Azure DevOps release pipeline is trigerred that will:
-- In a **Prerelease** step, install both Chocolatey and Nuget packages from the private feed, and run tests again. If tests are successful, the packages are promoted to `@Prerelease` view inside the private feed;
-- In a **Release** step, publish the packages to _[NuGet](https://www.nuget.org/)_ and _[Chocolatey](https://chocolatey.org/)_, and publish the module to _[PowerShell Gallery](https://www.powershellgallery.com/)_, then promote the packages to to `@Release` view inside the private feed.
+### CD
+
+The CD is an Azure DevOps release pipeline is trigerred that will:
+- In a **Prerelease** step, install both Chocolatey and Nuget packages from the private feed in a container, and run tests again. If tests are successful, the packages are promoted to `@Prerelease` view inside the private feed;
+- In a **Release** step, publish the packages to _[NuGet](https://www.nuget.org/)_ and _[Chocolatey](https://chocolatey.org/)_, and publish the module to _[PowerShell Gallery](https://www.powershellgallery.com/)_, then promote the packages to to `@PRelease` view inside the private feed.promote the packages to to `@Release` view inside the private feed.
