@@ -21,6 +21,10 @@ PowerShell module to create and manage NuGet packages.
 - [Update-NuGet](commands/Update-NuGet.md)
 
 ## Release Notes
+0.0.9:
+- Added support for Chocolatey-specific properties in ConvertTo-NuspecManifest, Resolve-NuspecProperty and Set-NuspecProperty
+- Set-NuspecLicese: Force switch now removes licenseUrl if it had specified.
+
 0.0.8:
 - Install-NuGet: Fixed if bin folder is not present (as it is removed if empty when packaged);
 - Updated tests.
