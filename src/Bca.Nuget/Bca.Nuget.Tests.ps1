@@ -23,11 +23,11 @@ Describe "ConvertTo-NuspecManifest" {
 
     BeforeAll {
         $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-        $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget2.nuspec"
-        $ChocoManifest = Join-Path $env:TEMP "Bca.Nuget\bca-nuget.nuspec"
-        $ScriptPath = Join-Path $env:TEMP "Bca.Nuget\TestScript.ps1"
-        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
+        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
+        $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget2.nuspec"
+        $ChocoManifest = Join-Path $env:TEMP "Bca.Nuget/bca-nuget.nuspec"
+        $ScriptPath = Join-Path $env:TEMP "Bca.Nuget/TestScript.ps1"
+        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget/TestScript.nuspec"
         if (!(Test-Path (Split-Path $NuspecManifest -Parent))) { New-Item -Path (Split-Path $NuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
         if (!(Test-Path (Split-Path $NuspecManifest2 -Parent))) { New-Item -Path (Split-Path $NuspecManifest2 -Parent) -ItemType Directory -Force | Out-Null }
         if (!(Test-Path (Split-Path $ScriptNuspecManifest -Parent))) { New-Item -Path (Split-Path $ScriptNuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
@@ -133,8 +133,8 @@ Describe "ConvertTo-NuspecManifest" {
 
 Describe "Get-NuspecProperty" {
     BeforeAll {
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
+        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
+        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget/TestScript.nuspec"
     }
 
     It "Getting Id by Path" {
@@ -159,7 +159,7 @@ Describe "Get-NuspecProperty" {
 
 Describe "Set-NuspecLicense" {
     BeforeAll {
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
     }
     
@@ -210,7 +210,7 @@ Describe "Set-NuspecLicense" {
         try 
         {
             Write-Host -ForegroundColor Cyan "This test should also confirm that Add-NuspecFile is working as expected."
-            $Nuspec = Set-NuspecLicense -Type file -Value "\License.txt" -Nuspec $Nuspec -Force
+            $Nuspec = Set-NuspecLicense -Type file -Value "/License.txt" -Nuspec $Nuspec -Force
         }
         catch
         {
@@ -218,7 +218,7 @@ Describe "Set-NuspecLicense" {
         }
         $Nuspec.package.metadata.license.type | Should -BeExactly "file"
         $Nuspec.package.metadata.license.InnerText | Should -BeExactly "License.txt"
-        ($Nuspec.package.files.file | Where-Object { $_.src -eq "\License.txt" }).src | Should -BeExactly "\License.txt"
+        ($Nuspec.package.files.file | Where-Object { $_.src -eq "/License.txt" }).src | Should -BeExactly "/License.txt"
     }
 }
 
@@ -226,7 +226,7 @@ Describe "New-NuGetPackage" {
     Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
 
     BeforeAll {
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
     }
 
