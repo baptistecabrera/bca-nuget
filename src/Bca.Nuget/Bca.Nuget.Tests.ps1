@@ -67,7 +67,7 @@ Describe "ConvertTo-NuspecManifest" {
     It "Converting PS Module Manifest to Nuspec" {
         try
         {
-            (Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest)
+            Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match | Save-NuspecManifest -Path $NuspecManifest
             $Result = $true
         }
         catch { Write-Error $_ ; $Result = $false }
@@ -79,26 +79,11 @@ Describe "ConvertTo-NuspecManifest" {
         $Result | Should -Be $true
     }
 
-    It "Converting PS Module Manifest to Chocolatey Nuspec" {
-        try
-        {
-            (Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -AcceptChocolateyProperties).Save($ChocoManifest)
-            $Result = $true
-        }
-        catch { Write-Error $_ ; $Result = $false }
-        $Result | Should -Be $true
-    }
-
-    It "Testing generated Chocolatey Nuspec file" {
-        (Get-NuspecProperty -Name bugTrackerUrl).Value | Should -BeExactly "https://github.com/baptistecabrera/bca-nuget/issues"
-        Test-Path $ChocoManifest | Should -Be $true
-    }
-
     It "Converting PS Module Info to Nuspec" {
         try
         {
             $Result = $true
-            (Get-Module -Name Bca.Nuget | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest2)
+            Get-Module -Name Bca.Nuget | ConvertTo-NuspecManifest -DependencyMatch $Match | Save-NuspecManifest -Path $NuspecManifest2
         }
         catch { $Result = $false }
         $Result | Should -Be $true
@@ -112,6 +97,21 @@ Describe "ConvertTo-NuspecManifest" {
     It "Testing both generated module Nuspec file" {
         $Result = ((Get-Content $NuspecManifest) -join "`r`n") -eq ((Get-Content $NuspecManifest2) -join "`r`n")
         $Result | Should -Be $true
+    }
+
+    It "Converting PS Module Manifest to Chocolatey Nuspec" {
+        try
+        {
+            Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -AcceptChocolateyProperties | Save-NuspecManifest -Path $ChocoManifest
+            $Result = $true
+        }
+        catch { Write-Error $_ ; $Result = $false }
+        $Result | Should -Be $true
+    }
+
+    It "Testing generated Chocolatey Nuspec file" {
+        (Get-NuspecProperty -Name bugTrackerUrl -Path $ChocoManifest).Value | Should -BeExactly "https://github.com/baptistecabrera/bca-nuget/issues"
+        Test-Path $ChocoManifest | Should -Be $true
     }
 
     It "Converting Script File Info to Nuspec" {
@@ -167,7 +167,7 @@ Describe "Set-NuspecLicense" {
     It "Setting license from Expression" {
         try 
         {
-            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
+            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec -Force
         }
         catch
         {
@@ -177,34 +177,34 @@ Describe "Set-NuspecLicense" {
         $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT"
     }
 
-    It "Setting license from Expression (!Force) - Should display a warning above ^" {
-        try 
-        {
-            # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
-            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND ALL" -Nuspec $Nuspec
-        }
-        catch
-        {
-            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-        }
-        $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
-        $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT"
-    }
+    # It "Setting license from Expression (!Force) - Should display a warning above ^" {
+    #     try 
+    #     {
+    #         # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+    #         $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
+    #         $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND ALL" -Nuspec $Nuspec
+    #     }
+    #     catch
+    #     {
+    #         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+    #     }
+    #     $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
+    #     $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT"
+    # }
 
-    It "Setting license from Expression (Force)" {
-        try 
-        {
-            # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND AAL" -Nuspec $Nuspec -Force
-        }
-        catch
-        {
-            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-        }
-        $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
-        $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT AND AAL"
-    }
+    # It "Setting license from Expression (Force)" {
+    #     try 
+    #     {
+    #         # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+    #         $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND AAL" -Nuspec $Nuspec -Force
+    #     }
+    #     catch
+    #     {
+    #         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+    #     }
+    #     $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
+    #     $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT AND AAL"
+    # }
 
     It "Setting license from File" {
         try 
