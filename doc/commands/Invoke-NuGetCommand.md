@@ -24,7 +24,7 @@ A string containing the NuGet command to invoke.
 |Type:|String|
 |Position:|0|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Target`
 A string containing the target of the NuGet command to invoke.
@@ -34,7 +34,7 @@ A string containing the target of the NuGet command to invoke.
 |Type:|String|
 |Position:|1|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Parameters`
 An hashtable containing the additionnal parameters to specify to NuGet.
@@ -42,10 +42,10 @@ An hashtable containing the additionnal parameters to specify to NuGet.
 | | |
 |:-|:-|
 |Type:|Hashtable|
-|Aliases:|Options|
+|Aliases|Options|
 |Position:|2|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-NuGetPath`
 A string containing the path to the NuGet executable.
@@ -56,7 +56,7 @@ A string containing the path to the NuGet executable.
 |Default value:|(Get-NuGetPath)|
 |Position:|3|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 |Validation (ScriptBlock):|` Test-Path $_ `|
 
 ### `-Help`
@@ -68,7 +68,7 @@ A switch to call help of the specified command.
 |Default value:|False|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Inputs
 ****

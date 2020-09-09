@@ -28,10 +28,10 @@ The wildcard character * is allowed, and the double wildcard ** implies a recurs
 | | |
 |:-|:-|
 |Type:|String|
-|Aliases:|i|
+|Aliases|i|
 |Position:|0|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Exclude`
 A semicolon-delimited string containing a list of file or file patterns to exclude from the source.
@@ -40,10 +40,10 @@ The wildcard character * is allowed, and the double wildcard ** implies a recurs
 | | |
 |:-|:-|
 |Type:|String|
-|Aliases:|x|
+|Aliases|x|
 |Position:|1|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-BuildAction`
 A string containing the build action to assign to the content item for MSBuild.
@@ -51,11 +51,11 @@ A string containing the build action to assign to the content item for MSBuild.
 | | |
 |:-|:-|
 |Type:|String|
-|Aliases:|b|
+|Aliases|b|
 |Default value:|Compile|
 |Position:|2|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 |Validation (ValidValues):|Content, None, EmbeddedResource, Compile|
 
 ### `-CopyToOutput`
@@ -64,11 +64,11 @@ A switch specifying whether or not to copy content items to the build (or publis
 | | |
 |:-|:-|
 |Type:|SwitchParameter|
-|Aliases:|o|
+|Aliases|o|
 |Default value:|False|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Flatten`
 A switch specifying whether or not to copy content items to a single folder in the build output (specified), or to preserve the folder structure in the package (not specified). This flag only works when copyToOutput flag is specified.
@@ -76,11 +76,11 @@ A switch specifying whether or not to copy content items to a single folder in t
 | | |
 |:-|:-|
 |Type:|SwitchParameter|
-|Aliases:|f|
+|Aliases|f|
 |Default value:|False|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Nuspec`
 An XmlDocument containing the Nuspec manifest.
@@ -90,7 +90,7 @@ An XmlDocument containing the Nuspec manifest.
 |Type:|XmlDocument|
 |Position:|3|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Outputs
 **System.Xml.XmlDocument**

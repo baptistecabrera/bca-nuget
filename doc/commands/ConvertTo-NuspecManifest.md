@@ -40,7 +40,7 @@ An object containing the specifications to be converted into a Nuspec manifest.
 |Type:|Object|
 |Position:|0|
 |Required:|True|
-|Accept pipeline input:|True|
+|Accepts pipepline input:|True|
 |Validation (ScriptBlock):|` try { $_ | ConvertTo-Json | ConvertFrom-Json $true } catch { throw "Could not convert input object type '$($InputObject.GetType().Name)'." } `|
 
 ### `-AcceptChocolateyProperties`
@@ -52,7 +52,7 @@ A switch specifying whether or not to accept Chocolatey-specific properties.
 |Default value:|False|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-DependencyMatch`
 A string containing a regular expression to match the dependencies against.
@@ -63,7 +63,7 @@ If used and a dependency does not match, it will be excluded fro the resulting n
 |Type:|Object|
 |Position:|1|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Inputs
 **System.Object**
@@ -77,3 +77,4 @@ This version supports mostly PowerShell Module amd Scripts File Info properties.
 - [Get-NuspecProperty](Get-NuspecProperty.md)
 - [Set-NuspecProperty](Set-NuspecProperty.md)
 - [Resolve-NuspecProperty](Resolve-NuspecProperty.md)
+- [https://docs.microsoft.com/en-us/nuget/reference/nuspec](https://docs.microsoft.com/en-us/nuget/reference/nuspec)

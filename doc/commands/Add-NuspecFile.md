@@ -28,10 +28,10 @@ The wildcard character * is allowed, and the double wildcard ** implies a recurs
 | | |
 |:-|:-|
 |Type:|String|
-|Aliases:|src, s|
+|Aliases|src, s|
 |Position:|0|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Destination`
 A string containing the destination of the file to be added.
@@ -39,10 +39,10 @@ A string containing the destination of the file to be added.
 | | |
 |:-|:-|
 |Type:|String|
-|Aliases:|Target, d, t|
+|Aliases|Target, d, t|
 |Position:|1|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Exclude`
 A semicolon-delimited string containing a list of file or file patterns to exclude from the source.
@@ -51,10 +51,10 @@ The wildcard character * is allowed, and the double wildcard ** implies a recurs
 | | |
 |:-|:-|
 |Type:|String|
-|Aliases:|x|
+|Aliases|x|
 |Position:|2|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Nuspec`
 An XmlDocument containing the Nuspec manifest.
@@ -64,7 +64,7 @@ An XmlDocument containing the Nuspec manifest.
 |Type:|XmlDocument|
 |Position:|3|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Outputs
 **System.Xml.XmlDocument**

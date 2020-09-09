@@ -53,11 +53,11 @@ A string containing the name of the dependency to be added.
 | | |
 |:-|:-|
 |Type:|String|
-|Aliases:|Id|
+|Aliases|Id|
 |Parameter sets:|FromValue|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Version`
 A string containing the version of the dependency to be added.
@@ -69,7 +69,7 @@ A string containing the version of the dependency to be added.
 |Parameter sets:|FromValue|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-InputObject`
 An object containing the dependencies Name(s) and Version(s) to be added.
@@ -80,7 +80,7 @@ An object containing the dependencies Name(s) and Version(s) to be added.
 |Parameter sets:|FromObject|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|True|
+|Accepts pipepline input:|True|
 
 ### `-Nuspec`
 An XmlDocument containing the Nuspec manifest.
@@ -91,7 +91,7 @@ An XmlDocument containing the Nuspec manifest.
 |Parameter sets:|FromObject, FromValue|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Match`
 
@@ -101,7 +101,7 @@ An XmlDocument containing the Nuspec manifest.
 |Parameter sets:|FromValue, FromObject|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Inputs
 **System.Object**
@@ -110,3 +110,5 @@ Accepts an object containing the Name/Id and Version as an input from the pipeli
 **System.Xml.XmlDocument**
 Returns an XmlDocument containing the manifest.
 ## Related Links
+- [https://docs.microsoft.com/en-us/nuget/consume-packages/dependency-resolution](https://docs.microsoft.com/en-us/nuget/consume-packages/dependency-resolution)
+- [https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards](https://docs.microsoft.com/en-us/nuget/reference/package-versioning#version-ranges-and-wildcards)

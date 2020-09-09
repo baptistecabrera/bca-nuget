@@ -99,7 +99,6 @@ function Set-NuspecProperty
                 }
                 "^description$|^summary$|^id$|^title$|^authors$|^owners$|^copyright$|^projectUrl$|^iconUrl$|^tags$|^releaseNotes$"
                 {
-                    # if ($Name -eq "licenseUrl") { Write-Warning "Property 'licenseUrl' is being deprecated, consider using 'license' instead." }
                     if (!$Nuspec.package.metadata.$Name)
                     {
                         $NewMetadata = $Nuspec.CreateElement($Name, $Nuspec.package.xmlns)

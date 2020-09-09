@@ -40,7 +40,7 @@ A string containing the name of the property to be set.
 |Parameter sets:|FromXml, FromFile|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|True (by property name)|
+|Accepts pipepline input:|True (by property name)|
 
 ### `-Value`
 An object containing the value(s) of the property.
@@ -51,7 +51,7 @@ An object containing the value(s) of the property.
 |Parameter sets:|FromXml, FromFile|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|True (by property name)|
+|Accepts pipepline input:|True (by property name)|
 
 ### `-Path`
 A string containing the the full path of the Nuspec manifest file.
@@ -63,7 +63,7 @@ The file will be saved after the property is set.
 |Parameter sets:|FromFile|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 |Validation (ScriptBlock):|` Test-Path $_ `|
 
 ### `-Nuspec`
@@ -75,7 +75,7 @@ An XmlDocument containing the Nuspec manifest.
 |Parameter sets:|FromXml|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-AcceptChocolateyProperties`
 A switch specifying whether or not to accept Chocolatey-specific properties.
@@ -87,7 +87,7 @@ A switch specifying whether or not to accept Chocolatey-specific properties.
 |Parameter sets:|FromXml, FromFile|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Force`
 A switch specifying whether or not to override teh value.
@@ -99,7 +99,7 @@ A switch specifying whether or not to override teh value.
 |Parameter sets:|FromXml, FromFile|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Inputs
 **System.Object**
@@ -110,3 +110,4 @@ Returns an XmlDocument containing the manifest.
 ## Related Links
 - [Resolve-NuspecProperty](Resolve-NuspecProperty.md)
 - [Add-NuspecDependency](Add-NuspecDependency.md)
+- [https://docs.microsoft.com/en-us/nuget/reference/nuspec](https://docs.microsoft.com/en-us/nuget/reference/nuspec)

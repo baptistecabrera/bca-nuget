@@ -35,7 +35,7 @@ A string containing the full path to the Nuspec manifest file.
 |Parameter sets:|FromFile|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 |Validation (ScriptBlock):|` Test-Path $_ `|
 
 ### `-Nuspec`
@@ -47,7 +47,7 @@ An XmlDocument containing the Nuspec manifest.
 |Parameter sets:|FromXml|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Schema`
 A string containing either the content or the full path of the xsd schema.
@@ -60,7 +60,7 @@ Will use 'Get-NuspecSchema' if omitted.
 |Parameter sets:|FromXml, FromFile|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Inputs
 ****
@@ -70,3 +70,5 @@ Will use 'Get-NuspecSchema' if omitted.
 Returns a boolean specifying whether or not the manifest is conform to teh schema.
 ## Related Links
 - [Get-NuspecSchema](Get-NuspecSchema.md)
+- [https://docs.microsoft.com/en-us/nuget/reference/nuspec](https://docs.microsoft.com/en-us/nuget/reference/nuspec)
+- [https://raw.githubusercontent.com/MyGet/NuGetPackages/master/NuSpec/tools/nuspec.xsd](https://raw.githubusercontent.com/MyGet/NuGetPackages/master/NuSpec/tools/nuspec.xsd)

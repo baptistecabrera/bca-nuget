@@ -25,6 +25,7 @@ Describe "ConvertTo-NuspecManifest" {
         $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
         $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
         $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget2.nuspec"
+        $ChocoManifest = Join-Path $env:TEMP "Bca.Nuget\bca-nuget.nuspec"
         $ScriptPath = Join-Path $env:TEMP "Bca.Nuget\TestScript.ps1"
         $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
         if (!(Test-Path (Split-Path $NuspecManifest -Parent))) { New-Item -Path (Split-Path $NuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
@@ -69,13 +70,28 @@ Describe "ConvertTo-NuspecManifest" {
             (Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest)
             $Result = $true
         }
-        catch { Write-Error $_ ;$Result = $false }
+        catch { Write-Error $_ ; $Result = $false }
         $Result | Should -Be $true
     }
 
     It "Testing generated Nuspec file" {
         $Result = Test-Path $NuspecManifest
         $Result | Should -Be $true
+    }
+
+    It "Converting PS Module Manifest to Chocolatey Nuspec" {
+        try
+        {
+            (Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -AcceptChocolateyProperties).Save($ChocoManifest)
+            $Result = $true
+        }
+        catch { Write-Error $_ ; $Result = $false }
+        $Result | Should -Be $true
+    }
+
+    It "Testing generated Chocolatey Nuspec file" {
+        (Get-NuspecProperty -Name bugTrackerUrl).Value | Should -BeExactly "https://github.com/baptistecabrera/bca-nuget/issues"
+        Test-Path $ChocoManifest | Should -Be $true
     }
 
     It "Converting PS Module Info to Nuspec" {

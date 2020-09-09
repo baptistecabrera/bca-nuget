@@ -35,7 +35,7 @@ A string containing the name of the property to be resolved.
 |Type:|String|
 |Position:|0|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Value`
 An object containing the value(s) of the property.
@@ -45,7 +45,7 @@ An object containing the value(s) of the property.
 |Type:|Object|
 |Position:|1|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-AcceptChocolateyProperties`
 A switch specifying whether or not to accept Chocolatey-specific properties.
@@ -56,7 +56,7 @@ A switch specifying whether or not to accept Chocolatey-specific properties.
 |Default value:|False|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Inputs
 ****
@@ -66,3 +66,4 @@ A switch specifying whether or not to accept Chocolatey-specific properties.
 Returns a PSCustomObject containing the name and value of the mapped property.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)
+- [https://docs.microsoft.com/en-us/nuget/reference/nuspec](https://docs.microsoft.com/en-us/nuget/reference/nuspec)

@@ -23,3 +23,5 @@ This example connects to GitHub and retrieve xsd schema for Nuspec files.
 **System.String**
 Returns a string containing the XSD content from Nuspec schema
 ## Related Links
+- [https://docs.microsoft.com/en-us/nuget/reference/nuspec](https://docs.microsoft.com/en-us/nuget/reference/nuspec)
+- [https://raw.githubusercontent.com/MyGet/NuGetPackages/master/NuSpec/tools/nuspec.xsd](https://raw.githubusercontent.com/MyGet/NuGetPackages/master/NuSpec/tools/nuspec.xsd)

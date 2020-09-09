@@ -18,7 +18,7 @@ A string containing the type of license (file or expression).
 |Type:|String|
 |Position:|0|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 |Validation (ValidValues):|file, expression|
 
 ### `-Value`
@@ -29,7 +29,7 @@ A string containing the reference of the license (package relative path to the l
 |Type:|String|
 |Position:|1|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Nuspec`
 An XmlDocument containing the Nuspec manifest.
@@ -39,7 +39,7 @@ An XmlDocument containing the Nuspec manifest.
 |Type:|XmlDocument|
 |Position:|2|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Force`
 A switch sepecifying whether or not to override license and/or licenseUrl if it already exists.
@@ -50,7 +50,7 @@ A switch sepecifying whether or not to override license and/or licenseUrl if it 
 |Default value:|False|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Inputs
 **System.Object**
@@ -60,3 +60,4 @@ Accepts an object containing the Name and Value as an input from the pipeline.
 Returns an XmlDocument containing the manifest.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)
+- [https://docs.microsoft.com/en-us/nuget/reference/nuspec#license](https://docs.microsoft.com/en-us/nuget/reference/nuspec#license)

@@ -25,5 +25,5 @@ A switch specifying whether or not to force the install if already installed.
 |Default value:|False|
 |Position:|Named|
 |Required:|False|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 

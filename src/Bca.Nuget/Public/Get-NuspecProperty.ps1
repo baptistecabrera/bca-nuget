@@ -44,15 +44,16 @@ function Get-NuspecProperty
 
     $Property = New-Object -TypeName PSCustomObject
     if ($PSCmdlet.ParameterSetName -eq "FromFile") { [xml] $Nuspec = Get-Content $Path }
-    switch -Regex ($Name)
+    
+    $NameSpace = New-Object System.Xml.XmlNamespaceManager($Nuspec.NameTable)
+    $NameSpace.AddNamespace("ns", $Nuspec.DocumentElement.xmlns)
+    
+    $PropertyNode = $nuspec.SelectSingleNode("//ns:$($Name)", $NameSpace)
+    if ($PropertyNode)
     {
-        "^version$|^description$|^summary$|^id$|^title$|^authors$|^owners$|^copyright$|^projectUrl$|^licenseUrl$|^iconUrl$|^tags$|^releaseNotes$|^dependencies$"
-        {
-            $Value = $Nuspec.package.metadata.$Name
-            $Property | Add-Member -MemberType NoteProperty -Name "Name" -Value $Name.ToLower() -PassThru | Out-Null
-            $Property | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
-        }
-        default { Write-Warning "Property '$Name' does not match any mapped Nuspec property." }
+        $ChildName = ($PropertyNode | Get-Member -MemberType Property).Name
+        $Property | Add-Member -MemberType NoteProperty -Name "Name" -Value $PropertyNode.ToString() -PassThru | Out-Null
+        $Property | Add-Member -MemberType NoteProperty -Name "Value" -Value $PropertyNode.$ChildName -PassThru | Out-Null
     }
     $Property
 }

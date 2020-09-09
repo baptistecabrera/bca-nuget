@@ -12,7 +12,7 @@
     RootModule      = 'Bca.Nuget'
 
     # Version number of this module.
-    ModuleVersion   = '0.0.9'
+    ModuleVersion   = '0.1.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -117,39 +117,13 @@
             IconUri      = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = '0.0.9:
-- Added support for Chocolatey-specific properties in ConvertTo-NuspecManifest, Resolve-NuspecProperty and Set-NuspecProperty
-- Set-NuspecLicese: Force switch now removes licenseUrl if it had specified.
-- Bug fixes
-
-0.0.8:
-- Install-NuGet: Fixed if bin folder is not present (as it is removed if empty when packaged);
-- Updated tests.
-
-0.0.7:
-- Install-NuGet: New function that will install NuGet if not present when importing the module (can be used to update with Force switch).
-- Update-NuGet: New function that will update NuGet to the latest version.
-
-0.0.6:
-- ConvertTo-NuspecManifest: Added support for PowerShell Script Info objects.
-
-0.0.5:
+            ReleaseNotes = '0.1.0:
+- This version now supports certain Chocolatey-specific properties in ConvertTo-NuspecManifest, Resolve-NuspecProperty and Set-NuspecProperty;
+- Save-NuspecManifest: New function to save a Nuspec manifest to a file;
+- Set-NuspecLicese: Force switch now removes licenseUrl if it had specified;
+- Get-NuspecProperty: Value now returns an array instead of a list of nodes if multiple (e.g. property name dependencies will return an array of id and version as the value instead of an array of dependency);
 - Bug fixes.
-
-0.0.4:
-- ConvertTo-NuspecManifest: Added support for Module objects.
-
-0.0.3:
-- Added files support (Add-NuspecContentFile and Add-NuspecFile);
-- Set-NuspecLicense: New function that supports either SPDX license or file;
-- Added a dependency on module Bca.Spdx.
-
-0.0.2:
-- Added new function for Nuspec properties (Get-NuspecProperty, Set-NuspecProperty, Resolve-NuspecProperty);
-- ConvertTo-NuspecManifest: Moved a great deal of logic in Resolve-NuspecProperty.
-
-0.0.1:
-- First version.'
+'
 
             # Prerelease of this module
             Prerelease   = ""

@@ -30,7 +30,7 @@ A string containing the name of the property to be returned.
 |Parameter sets:|FromXml, FromFile|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ### `-Path`
 A string containing the the full path of the Nuspec manifest file.
@@ -41,7 +41,7 @@ A string containing the the full path of the Nuspec manifest file.
 |Parameter sets:|FromFile|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 |Validation (ScriptBlock):|` Test-Path $_ `|
 
 ### `-Nuspec`
@@ -53,7 +53,7 @@ An XmlDocument containing the Nuspec manifest.
 |Parameter sets:|FromXml|
 |Position:|Named|
 |Required:|True|
-|Accept pipeline input:|False|
+|Accepts pipepline input:|False|
 
 ## Inputs
 ****
@@ -64,3 +64,4 @@ Returns a PSCustomObject containing the name and value of the mapped property.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)
 - [Resolve-NuspecProperty](Resolve-NuspecProperty.md)
+- [https://docs.microsoft.com/en-us/nuget/reference/nuspec](https://docs.microsoft.com/en-us/nuget/reference/nuspec)
