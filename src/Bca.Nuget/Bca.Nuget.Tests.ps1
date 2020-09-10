@@ -17,16 +17,17 @@ Describe "Module" {
     }
 }
 
-Describe "ConvertTo-NuspecManifest" {
-    Write-Host -ForegroundColor Cyan "These tests should also confirm that Resolve-NuspecProperty, Set-NuspecProperty and Add-NuspecDependency are working as expected."
-    Write-Host -ForegroundColor Cyan "Warning(s) on unmatched properties are expected."
+Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
 
     BeforeAll {
+        Write-Host -ForegroundColor Cyan "These tests should also confirm that Resolve-NuspecProperty, Set-NuspecProperty and Add-NuspecDependency are working as expected."
+        Write-Host -ForegroundColor Cyan "Warning(s) on unmatched properties are expected."
         $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-        $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget2.nuspec"
-        $ScriptPath = Join-Path $env:TEMP "Bca.Nuget\TestScript.ps1"
-        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
+        $NuspecManifest2 = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget2.nuspec"
+        $ChocoManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/bca-nuget.nuspec"
+        $ScriptPath = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/TestScript.ps1"
+        $ScriptNuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/TestScript.nuspec"
         if (!(Test-Path (Split-Path $NuspecManifest -Parent))) { New-Item -Path (Split-Path $NuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
         if (!(Test-Path (Split-Path $NuspecManifest2 -Parent))) { New-Item -Path (Split-Path $NuspecManifest2 -Parent) -ItemType Directory -Force | Out-Null }
         if (!(Test-Path (Split-Path $ScriptNuspecManifest -Parent))) { New-Item -Path (Split-Path $ScriptNuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
@@ -66,10 +67,10 @@ Describe "ConvertTo-NuspecManifest" {
     It "Converting PS Module Manifest to Nuspec" {
         try
         {
-            (Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest)
+            Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match | Save-NuspecManifest -Path $NuspecManifest
             $Result = $true
         }
-        catch { Write-Error $_ ;$Result = $false }
+        catch { Write-Error $_ ; $Result = $false }
         $Result | Should -Be $true
     }
 
@@ -82,7 +83,7 @@ Describe "ConvertTo-NuspecManifest" {
         try
         {
             $Result = $true
-            (Get-Module -Name Bca.Nuget | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($NuspecManifest2)
+            Get-Module -Name Bca.Nuget | ConvertTo-NuspecManifest -DependencyMatch $Match | Save-NuspecManifest -Path $NuspecManifest2
         }
         catch { $Result = $false }
         $Result | Should -Be $true
@@ -98,12 +99,27 @@ Describe "ConvertTo-NuspecManifest" {
         $Result | Should -Be $true
     }
 
+    It "Converting PS Module Manifest to Chocolatey Nuspec" {
+        try
+        {
+            Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -AcceptChocolateyProperties | Save-NuspecManifest -Path $ChocoManifest
+            $Result = $true
+        }
+        catch { Write-Error $_ ; $Result = $false }
+        $Result | Should -Be $true
+    }
+
+    It "Testing generated Chocolatey Nuspec file" {
+        Test-Path $ChocoManifest | Should -Be $true
+        (Get-NuspecProperty -Name bugTrackerUrl -Path $ChocoManifest).Value | Should -BeExactly "https://github.com/baptistecabrera/bca-nuget/issues"
+    }
+
     It "Converting Script File Info to Nuspec" {
         try
         {
             $Result = $true
             New-ScriptFileInfo @ScriptInfo
-            (Test-ScriptFileInfo -Path $ScriptPath | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($ScriptNuspecManifest)
+            Test-ScriptFileInfo -Path $ScriptPath | ConvertTo-NuspecManifest -DependencyMatch $Match | Save-NuspecManifest -Path $ScriptNuspecManifest
         }
         catch { $Result = $false }
         $Result | Should -Be $true
@@ -117,8 +133,8 @@ Describe "ConvertTo-NuspecManifest" {
 
 Describe "Get-NuspecProperty" {
     BeforeAll {
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
-        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget\TestScript.nuspec"
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
+        $ScriptNuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/TestScript.nuspec"
     }
 
     It "Getting Id by Path" {
@@ -143,7 +159,7 @@ Describe "Get-NuspecProperty" {
 
 Describe "Set-NuspecLicense" {
     BeforeAll {
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
     }
     
@@ -151,7 +167,7 @@ Describe "Set-NuspecLicense" {
     It "Setting license from Expression" {
         try 
         {
-            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
+            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec -Force
         }
         catch
         {
@@ -164,8 +180,6 @@ Describe "Set-NuspecLicense" {
     It "Setting license from Expression (!Force) - Should display a warning above ^" {
         try 
         {
-            # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
             $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND ALL" -Nuspec $Nuspec
         }
         catch
@@ -179,7 +193,6 @@ Describe "Set-NuspecLicense" {
     It "Setting license from Expression (Force)" {
         try 
         {
-            # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
             $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND AAL" -Nuspec $Nuspec -Force
         }
         catch
@@ -194,7 +207,7 @@ Describe "Set-NuspecLicense" {
         try 
         {
             Write-Host -ForegroundColor Cyan "This test should also confirm that Add-NuspecFile is working as expected."
-            $Nuspec = Set-NuspecLicense -Type file -Value "\License.txt" -Nuspec $Nuspec -Force
+            $Nuspec = Set-NuspecLicense -Type file -Value "/License.txt" -Nuspec $Nuspec -Force
         }
         catch
         {
@@ -202,15 +215,15 @@ Describe "Set-NuspecLicense" {
         }
         $Nuspec.package.metadata.license.type | Should -BeExactly "file"
         $Nuspec.package.metadata.license.InnerText | Should -BeExactly "License.txt"
-        ($Nuspec.package.files.file | Where-Object { $_.src -eq "\License.txt" }).src | Should -BeExactly "\License.txt"
+        ($Nuspec.package.files.file | Where-Object { $_.src -eq "/License.txt" }).src | Should -BeExactly "/License.txt"
     }
 }
 
-Describe "New-NuGetPackage" {
-    Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
+Describe "New-NuGetPackage" -Tags "WindowsOnly" {
 
     BeforeAll {
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget\Bca.Nuget.nuspec"
+        Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
     }
 
@@ -232,7 +245,7 @@ Describe "New-NuGetPackage" {
 }
 
 Describe "Cleanup" {
-    BeforeAll { $Directory = Join-Path $env:TEMP "Bca.Nuget" }
+    BeforeAll { $Directory = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget" }
     
     It "Removing test directory ($Directory)" {
         Remove-Item -Path $Directory -Force -Recurse

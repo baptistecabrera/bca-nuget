@@ -14,6 +14,8 @@ function Set-NuspecProperty
             The file will be saved after the property is set.
         .PARAMETER Nuspec
             An XmlDocument containing the Nuspec manifest.
+        .PARAMETER AcceptChocolateyProperties
+            A switch specifying whether or not to accept Chocolatey-specific properties.
         .PARAMETER Force
             A switch specifying whether or not to override teh value.
         .INPUTS
@@ -64,6 +66,9 @@ function Set-NuspecProperty
         [xml] $Nuspec,
         [Parameter(ParameterSetName = "FromFile", Mandatory = $false)]
         [Parameter(ParameterSetName = "FromXml", Mandatory = $false)]
+        [switch] $AcceptChocolateyProperties,
+        [Parameter(ParameterSetName = "FromFile", Mandatory = $false)]
+        [Parameter(ParameterSetName = "FromXml", Mandatory = $false)]
         [switch] $Force
     )
 
@@ -92,9 +97,8 @@ function Set-NuspecProperty
                     if ($Nuspec.package.metadata.version) { $Nuspec.package.metadata.version = "$($Nuspec.package.metadata.version)$($Value)" }
                     else { $Nuspec.package.metadata.version = "$($Value.ToString())" }
                 }
-                "^description$|^summary$|^id$|^title$|^authors$|^owners$|^copyright$|^projectUrl$|^licenseUrl$|^iconUrl$|^tags$|^releaseNotes$"
+                "^description$|^summary$|^id$|^title$|^authors$|^owners$|^copyright$|^projectUrl$|^iconUrl$|^tags$|^releaseNotes$"
                 {
-                    if ($Name -eq "licenseUrl") { Write-Warning "Property 'licenseUrl' is being deprecated, consider using Set-NuspecLicense instead." }
                     if (!$Nuspec.package.metadata.$Name)
                     {
                         $NewMetadata = $Nuspec.CreateElement($Name, $Nuspec.package.xmlns)
@@ -102,9 +106,47 @@ function Set-NuspecProperty
                     }
                     $Nuspec.package.metadata.$Name = $Value
                 }
+                "^licenseUrl$"
+                {
+                    if (!$Nuspec.package.metadata.license -or $AcceptChocolateyProperties)
+                    {
+                        if (!$AcceptChocolateyProperties) { Write-Warning "Property 'licenseUrl' is being deprecated, consider using 'license' instead." }
+                        if (!$Nuspec.package.metadata.$Name)
+                        {
+                            $NewMetadata = $Nuspec.CreateElement($Name, $Nuspec.package.xmlns)
+                            $Nuspec.GetElementsByTagName("metadata").AppendChild($NewMetadata)
+                        }
+                        $Nuspec.package.metadata.$Name = $Value
+                    }
+                    else { Write-Warning "Property 'license' already present, ignoring property 'licenseUrl' as it is being deprecated." }
+                }
+                "^license$"
+                {
+                    if ($AcceptChocolateyProperties) { Write-Warning "Property 'license' not yet supported by Chocolatey, use 'licenseUrl' instead." }
+                    else 
+                    {
+                        $LicenseFile = Get-Item $Value -ErrorAction SilentlyContinue
+                        if ($LicenseFile) { $LicenseType = "file" }
+                        else { $LicenseType = "expression" }
+                        $Nuspec = Set-NuspecLicense -Type $LicenseType -Value $Value -Nuspec $Nuspec -Force
+                    }
+                }
                 "dependencies"
                 {
                     $Nuspec = Add-NuspecDependency -InputObject $Value -Nuspec $Nuspec
+                }
+                "^docsUrl$|^mailingListUrl$|^bugTrackerUrl$|^packageSourceUrl$|^projectSourceUrl$"
+                {
+                    if ($AcceptChocolateyProperties)
+                    {
+                        if (!$Nuspec.package.metadata.$Name)
+                        {
+                            $NewMetadata = $Nuspec.CreateElement($Name, $Nuspec.package.xmlns)
+                            $Nuspec.GetElementsByTagName("metadata").AppendChild($NewMetadata)
+                        }
+                        $Nuspec.package.metadata.$Name = $Value
+                    }
+                    else { Write-Warning "Property '$Name' does not match any mapped Nuspec property." }
                 }
                 default
                 {

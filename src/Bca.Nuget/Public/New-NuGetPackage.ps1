@@ -38,7 +38,8 @@ function New-NuGetPackage
             -----------
             This example will build the package from the manifest, not excluding default content, and output it to D:\packages.
         .NOTES
-            This CmdLet does not stop on nuget pack error, output should be parsed.
+            - This CmdLet does not stop on nuget pack error, output should be parsed.
+            - This function is Windows compatible only
         .LINK
             Invoke-NuGetCommand
         .LINK

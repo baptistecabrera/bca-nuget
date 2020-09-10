@@ -7,6 +7,11 @@ function ConvertTo-NuspecManifest
             Converts an object to a NuspecManifest.
         .PARAMETER InputObject
             An object containing the specifications to be converted into a Nuspec manifest.
+        .PARAMETER AcceptChocolateyProperties
+            A switch specifying whether or not to accept Chocolatey-specific properties.
+        .PARAMETER DependencyMatch
+            A string containing a regular expression to match the dependencies against.
+            If used and a dependency does not match, it will be excluded fro the resulting nuspec manifest.
         .INPUTS
             System.Object
             Accepts an object representing data that can be mapped to Nuspec properties and converted to a Nuspec manifest.
@@ -49,7 +54,7 @@ function ConvertTo-NuspecManifest
         .LINK
             https://docs.microsoft.com/en-us/nuget/reference/nuspec
     #>
-    [CmdLetBinding()]
+    [CmdLetBinding()]  
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateScript( {
@@ -62,41 +67,70 @@ function ConvertTo-NuspecManifest
             } )]
         $InputObject,
         [Parameter(Mandatory = $false)]
+        [switch] $AcceptChocolateyProperties,
+        [Parameter(Mandatory = $false)]
         $DependencyMatch
     )
     
-    try 
+    begin {}
+    process
     {
-        [xml] $Nuspec = Get-Content (Join-Path (Join-Path (Split-Path $PSScriptRoot -Parent) "template") "template.nuspec.xml")
-        
-        Write-Verbose "Input object type is '$($InputObject.GetType().Name)'"
-        $InputObject = $InputObject | ConvertTo-Json | ConvertFrom-Json
-    
-        $InputObject | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($_.Name)" -and ($_.Name -notlike "Exported*") -and ($_.Name -notin "SessionState", "Definition") } | ForEach-Object {
-            $Current = $_
-            Write-Debug $Current
-            switch -Regex ($Current.Name)
-            {
-                "PrivateData"
-                {
-                    $InputObject."$($Current.Name)".PSData | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($Current.Name)".PSData."$($_.Name)" } | ForEach-Object {
-                        Resolve-NuspecProperty -Name $_.Name -Value $InputObject."$($Current.Name)".PSData."$($_.Name)" | Set-NuspecProperty -Nuspec $Nuspec -ErrorAction SilentlyContinue | Out-Null
-                    }
-                }
-                default { Resolve-NuspecProperty -Name $Current.Name -Value $InputObject."$($Current.Name)" | Set-NuspecProperty -Nuspec $Nuspec -ErrorAction SilentlyContinue | Out-Null }
-            }
-        }
-
-        if ((!$Nuspec.package.metadata.title) -and $Nuspec.package.metadata.id)
+        try
         {
-            Write-Verbose "No 'title' property found, using 'id' value ($($Nuspec.package.metadata.id)) as 'title'."
-            Set-NuspecProperty -Name "title" -Value $Nuspec.package.metadata.id -Nuspec $Nuspec | Out-Null
-        }
+            [xml] $Nuspec = Get-Content (Join-Path (Join-Path (Split-Path $PSScriptRoot -Parent) "template") "template.nuspec.xml")
+            
+            Write-Verbose "Input object type is '$($InputObject.GetType().Name)'"
+            $InputObject = $InputObject | ConvertTo-Json | ConvertFrom-Json
+        
+            $InputObject | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($_.Name)" -and ($_.Name -notlike "Exported*") -and ($_.Name -notin "SessionState", "Definition") } | ForEach-Object {
+                $Current = $_
+                Write-Debug $Current
+                switch -Regex ($InputObject."$($Current.Name)".GetType().Name)
+                {
+                    "PSCustomObject"
+                    {
+                        $ResolvedProperty = Resolve-NuspecProperty -Name $Current.Name -Value $InputObject."$($Current.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties
+                        if ($ResolvedProperty) { $ResolvedProperty | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
+                        else 
+                        {
+                            $InputObject."$($Current.Name)" | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($Current.Name)"."$($_.Name)" } | ForEach-Object {
+                                $SubCurrent = $_
+                                if ($InputObject."$($Current.Name)"."$($SubCurrent.Name)".GetType().Name -eq "PSCustomObject")
+                                {
+                                    $ResolvedSubProperty = Resolve-NuspecProperty -Name $SubCurrent.Name -Value $InputObject."$($Current.Name)"."$($SubCurrent.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties
+                                    if ($ResolvedSubProperty) { $ResolvedSubProperty | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
+                                    else
+                                    {
+                                        $InputObject."$($Current.Name)"."$($SubCurrent.Name)" | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($Current.Name)"."$($SubCurrent.Name)"."$($_.Name)" } | ForEach-Object {
+                                            Resolve-NuspecProperty -Name $_.Name -Value $InputObject."$($Current.Name)"."$($SubCurrent.Name)"."$($_.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null
+                                        }
+                                    }
+                                }
+                                else { Resolve-NuspecProperty -Name $SubCurrent.Name -Value $InputObject."$($Current.Name)"."$($SubCurrent.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
+                            }
+                        }
+                    }
+                    default { Resolve-NuspecProperty -Name $Current.Name -Value $InputObject."$($Current.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
+                }
+            }
 
-        $Nuspec
+            if ((!$Nuspec.package.metadata.title) -and $Nuspec.package.metadata.id)
+            {
+                Write-Verbose "No 'title' property found, using 'id' value ($($Nuspec.package.metadata.id)) as 'title'."
+                Set-NuspecProperty -Name "title" -Value $Nuspec.package.metadata.id -Nuspec $Nuspec | Out-Null
+            }
+            if ((!$Nuspec.package.metadata.summary) -and $Nuspec.package.metadata.description -and $AcceptChocolateyProperties)
+            {
+                Write-Verbose "No 'summary' property found, using 'description' value ($($Nuspec.package.metadata.description)) as 'summary'."
+                Set-NuspecProperty -Name "summary" -Value $Nuspec.package.metadata.description -Nuspec $Nuspec | Out-Null
+            }
+
+            $Nuspec
+        }
+        catch
+        {
+            Write-Error $_
+        }
     }
-    catch
-    {
-        Write-Error $_
-    }
+    end {}
 }
