@@ -57,7 +57,7 @@ function Invoke-NuGetCommand
         }
         else { $NuGetExe = "nuget.exe" }
 
-        $Expression = ".\$($NugetExe) $Command $Target"
+        $Expression = "./$($NugetExe) $Command $Target"
         if ($Help) { $Expression += " -h" }
         else
         {
