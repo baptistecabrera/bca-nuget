@@ -37,7 +37,7 @@ Test-ScriptFileInfo C:\MyScript.ps1 | ConvertTo-NuspecManifest | Save-NuspectMan
 ```
 
 ## Documentation
-Find extended documentation [at this page](docs/ReadMe.md).
+Find extended documentation [at this page](doc/ReadMe.md).
 
 ## How to install
 
