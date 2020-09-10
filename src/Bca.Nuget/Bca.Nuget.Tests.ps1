@@ -17,7 +17,7 @@ Describe "Module" {
     }
 }
 
-Describe "ConvertTo-NuspecManifest" {
+Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
 
     BeforeAll {
         Write-Host -ForegroundColor Cyan "These tests should also confirm that Resolve-NuspecProperty, Set-NuspecProperty and Add-NuspecDependency are working as expected."
@@ -110,8 +110,8 @@ Describe "ConvertTo-NuspecManifest" {
     }
 
     It "Testing generated Chocolatey Nuspec file" {
-        (Get-NuspecProperty -Name bugTrackerUrl -Path $ChocoManifest).Value | Should -BeExactly "https://github.com/baptistecabrera/bca-nuget/issues"
         Test-Path $ChocoManifest | Should -Be $true
+        (Get-NuspecProperty -Name bugTrackerUrl -Path $ChocoManifest).Value | Should -BeExactly "https://github.com/baptistecabrera/bca-nuget/issues"
     }
 
     It "Converting Script File Info to Nuspec" {
@@ -119,7 +119,7 @@ Describe "ConvertTo-NuspecManifest" {
         {
             $Result = $true
             New-ScriptFileInfo @ScriptInfo
-            (Test-ScriptFileInfo -Path $ScriptPath | ConvertTo-NuspecManifest -DependencyMatch $Match).Save($ScriptNuspecManifest)
+            Test-ScriptFileInfo -Path $ScriptPath | ConvertTo-NuspecManifest -DependencyMatch $Match | Save-NuspecManifest -Path $ScriptNuspecManifest
         }
         catch { $Result = $false }
         $Result | Should -Be $true
