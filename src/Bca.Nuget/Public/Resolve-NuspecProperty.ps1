@@ -155,7 +155,11 @@ function Resolve-NuspecProperty
         }
         default { Write-Warning "Property '$Name' does not match any mapped Nuspec property." }
     }
-    if ($ResolvedProperty.Name) { Write-Verbose "Property '$Name' resolved to '$($ResolvedProperty.Name)'." }
-    if ($ResolvedProperty.Value) { Write-Verbose "Value returned for this property is '$($ResolvedProperty.Value)' ($($ResolvedProperty.Value.GetType().Name))." }
+    if ($ResolvedProperty.Name)
+    { 
+        Write-Verbose "Property '$Name' resolved to '$($ResolvedProperty.Name)'."
+        if ($ResolvedProperty.Value) { Write-Verbose "Value returned for this property is '$($ResolvedProperty.Value)' ($($ResolvedProperty.Value.GetType().Name))." }
+    }
+    else { $ResolvedProperty = $null }
     $ResolvedProperty
 }

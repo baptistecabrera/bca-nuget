@@ -18,10 +18,10 @@ Describe "Module" {
 }
 
 Describe "ConvertTo-NuspecManifest" {
-    Write-Host -ForegroundColor Cyan "These tests should also confirm that Resolve-NuspecProperty, Set-NuspecProperty and Add-NuspecDependency are working as expected."
-    Write-Host -ForegroundColor Cyan "Warning(s) on unmatched properties are expected."
 
     BeforeAll {
+        Write-Host -ForegroundColor Cyan "These tests should also confirm that Resolve-NuspecProperty, Set-NuspecProperty and Add-NuspecDependency are working as expected."
+        Write-Host -ForegroundColor Cyan "Warning(s) on unmatched properties are expected."
         $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
         $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
         $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget2.nuspec"
@@ -177,34 +177,31 @@ Describe "Set-NuspecLicense" {
         $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT"
     }
 
-    # It "Setting license from Expression (!Force) - Should display a warning above ^" {
-    #     try 
-    #     {
-    #         # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-    #         $Nuspec = Set-NuspecLicense -Type expression -Value "MIT" -Nuspec $Nuspec
-    #         $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND ALL" -Nuspec $Nuspec
-    #     }
-    #     catch
-    #     {
-    #         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-    #     }
-    #     $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
-    #     $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT"
-    # }
+    It "Setting license from Expression (!Force) - Should display a warning above ^" {
+        try 
+        {
+            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND ALL" -Nuspec $Nuspec
+        }
+        catch
+        {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+        }
+        $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
+        $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT"
+    }
 
-    # It "Setting license from Expression (Force)" {
-    #     try 
-    #     {
-    #         # $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-    #         $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND AAL" -Nuspec $Nuspec -Force
-    #     }
-    #     catch
-    #     {
-    #         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
-    #     }
-    #     $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
-    #     $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT AND AAL"
-    # }
+    It "Setting license from Expression (Force)" {
+        try 
+        {
+            $Nuspec = Set-NuspecLicense -Type expression -Value "MIT AND AAL" -Nuspec $Nuspec -Force
+        }
+        catch
+        {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+        }
+        $Nuspec.package.metadata.license.type | Should -BeExactly "expression"
+        $Nuspec.package.metadata.license.InnerText | Should -BeExactly "MIT AND AAL"
+    }
 
     It "Setting license from File" {
         try 
@@ -223,9 +220,9 @@ Describe "Set-NuspecLicense" {
 }
 
 Describe "New-NuGetPackage" {
-    Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
 
     BeforeAll {
+        Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
         $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
     }

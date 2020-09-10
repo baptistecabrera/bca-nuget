@@ -54,7 +54,7 @@ function ConvertTo-NuspecManifest
         .LINK
             https://docs.microsoft.com/en-us/nuget/reference/nuspec
     #>
-    [CmdLetBinding()]
+    [CmdLetBinding()]  
     param(
         [Parameter(Mandatory = $true, ValueFromPipeline = $true)]
         [ValidateScript( {
