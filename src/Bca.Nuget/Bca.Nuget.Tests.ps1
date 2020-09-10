@@ -23,11 +23,11 @@ Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
         Write-Host -ForegroundColor Cyan "These tests should also confirm that Resolve-NuspecProperty, Set-NuspecProperty and Add-NuspecDependency are working as expected."
         Write-Host -ForegroundColor Cyan "Warning(s) on unmatched properties are expected."
         $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
-        $NuspecManifest2 = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget2.nuspec"
-        $ChocoManifest = Join-Path $env:TEMP "Bca.Nuget/bca-nuget.nuspec"
-        $ScriptPath = Join-Path $env:TEMP "Bca.Nuget/TestScript.ps1"
-        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget/TestScript.nuspec"
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
+        $NuspecManifest2 = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget2.nuspec"
+        $ChocoManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/bca-nuget.nuspec"
+        $ScriptPath = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/TestScript.ps1"
+        $ScriptNuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/TestScript.nuspec"
         if (!(Test-Path (Split-Path $NuspecManifest -Parent))) { New-Item -Path (Split-Path $NuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
         if (!(Test-Path (Split-Path $NuspecManifest2 -Parent))) { New-Item -Path (Split-Path $NuspecManifest2 -Parent) -ItemType Directory -Force | Out-Null }
         if (!(Test-Path (Split-Path $ScriptNuspecManifest -Parent))) { New-Item -Path (Split-Path $ScriptNuspecManifest -Parent) -ItemType Directory -Force | Out-Null }
@@ -133,8 +133,8 @@ Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
 
 Describe "Get-NuspecProperty" {
     BeforeAll {
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
-        $ScriptNuspecManifest = Join-Path $env:TEMP "Bca.Nuget/TestScript.nuspec"
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
+        $ScriptNuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/TestScript.nuspec"
     }
 
     It "Getting Id by Path" {
@@ -159,7 +159,7 @@ Describe "Get-NuspecProperty" {
 
 Describe "Set-NuspecLicense" {
     BeforeAll {
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
     }
     
@@ -223,7 +223,7 @@ Describe "New-NuGetPackage" {
 
     BeforeAll {
         Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
-        $NuspecManifest = Join-Path $env:TEMP "Bca.Nuget/Bca.Nuget.nuspec"
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
         $Nuspec = [xml](Get-Content -Path $NuspecManifest)
     }
 
@@ -245,7 +245,7 @@ Describe "New-NuGetPackage" {
 }
 
 Describe "Cleanup" {
-    BeforeAll { $Directory = Join-Path $env:TEMP "Bca.Nuget" }
+    BeforeAll { $Directory = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget" }
     
     It "Removing test directory ($Directory)" {
         Remove-Item -Path $Directory -Force -Recurse
