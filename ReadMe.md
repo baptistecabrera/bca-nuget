@@ -27,7 +27,7 @@ Import-PowerShellDataFile -Path .\MyModule.psd1 | ConvertTo-NuspecManifest | Sav
 ### Convert a PS Module Object
 
 ```ps
-$Nuspec = Get-Module -Name MyModule | ConvertTo-NuspecManifest | Save-NuspectManifest -Path "C:\MyModule.nuspec"
+Get-Module -Name MyModule | ConvertTo-NuspecManifest | Save-NuspectManifest -Path "C:\MyModule.nuspec"
 ```
 
 ### Convert a PS Script Info
