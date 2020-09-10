@@ -10,6 +10,7 @@ _Bca.NuGet_ is a PowerShell module used to manage NuGet packages, but more impor
 - _Bca.NuGet_ has been created to answer my needs to streamline my package automation, but I provide it to people who may need such a tool.
 - It may contain bugs or lack some features, in this case, feel free to open an issue, and I'll manage it as best as I can.
 - This _GitHub_ repository is not the primary one, see transparency for more information.
+- Functions that use `nuget` command are Windows-compatible only (for now).
 
 ## Dependencies
 

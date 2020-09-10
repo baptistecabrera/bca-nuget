@@ -26,7 +26,8 @@ function Invoke-NuGetCommand
             -----------
             This example will build the package from the manifest, not excluding default content, and output it to D:\packages.
         .NOTES
-            This CmdLet does not stop on nuget error, output should be parsed.
+            - This CmdLet does not stop on nuget error, output should be parsed.
+            - This function is Windows compatible only
         .LINK
             https://docs.microsoft.com/en-us/nuget/tools/nuget-exe-cli-reference
     #>
