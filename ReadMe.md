@@ -67,6 +67,7 @@ _Please not that to date I am the only developper for this module._
 
 ### CI
 [![Build Status](https://dev.azure.com/baptistecabrera/Bca/_apis/build/status/Build/Bca.Nuget?repoName=bca-nuget&branchName=master)](https://dev.azure.com/baptistecabrera/Bca/_build/latest?definitionId=15&repoName=bca-nuget&branchName=master)
+
 The CI is an Azure DevOps build pipeline that will:
 - Test the module with _[Pester](https://pester.dev/)_ tests;
 - Run the _[PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)_;
@@ -74,6 +75,7 @@ The CI is an Azure DevOps build pipeline that will:
 
 ### CD
 [![Build Status](https://dev.azure.com/baptistecabrera/Bca/_apis/build/status/Release/Bca.Nuget?repoName=bca-nuget&branchName=master)](https://dev.azure.com/baptistecabrera/Bca/_build/latest?definitionId=16&repoName=bca-nuget&branchName=master)
+
 The CD is an Azure DevOps release pipeline is trigerred that will:
 - In a **Prerelease** step, install both Chocolatey and Nuget packages from the private feed in a container, and run tests again. If tests are successful, the packages are promoted to `@Prerelease` view inside the private feed;
 - In a **Release** step, publish the packages to _[NuGet](https://www.nuget.org/)_ and _[Chocolatey](https://chocolatey.org/)_, and publish the module to _[PowerShell Gallery](https://www.powershellgallery.com/)_, then promote the packages to to `@Release` view inside the private feed.
