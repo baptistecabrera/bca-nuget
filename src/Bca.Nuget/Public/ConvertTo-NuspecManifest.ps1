@@ -89,15 +89,25 @@ function ConvertTo-NuspecManifest
                 {
                     "PSCustomObject"
                     {
-                        $InputObject."$($Current.Name)" | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($Current.Name)"."$($_.Name)" } | ForEach-Object {
-                            $SubCurrent = $_
-                            if ($InputObject."$($Current.Name)"."$($SubCurrent.Name)".GetType().Name -eq "PSCustomObject")
-                            {
-                                $InputObject."$($Current.Name)"."$($SubCurrent.Name)" | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($Current.Name)"."$($SubCurrent.Name)"."$($_.Name)" } | ForEach-Object {
-                                    Resolve-NuspecProperty -Name $_.Name -Value $InputObject."$($Current.Name)"."$($SubCurrent.Name)"."$($_.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null
+                        $ResolvedProperty = Resolve-NuspecProperty -Name $Current.Name -Value $InputObject."$($Current.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties
+                        if ($ResolvedProperty) { $ResolvedProperty | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
+                        else 
+                        {
+                            $InputObject."$($Current.Name)" | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($Current.Name)"."$($_.Name)" } | ForEach-Object {
+                                $SubCurrent = $_
+                                if ($InputObject."$($Current.Name)"."$($SubCurrent.Name)".GetType().Name -eq "PSCustomObject")
+                                {
+                                    $ResolvedSubProperty = Resolve-NuspecProperty -Name $SubCurrent.Name -Value $InputObject."$($Current.Name)"."$($SubCurrent.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties
+                                    if ($ResolvedSubProperty) { $ResolvedSubProperty | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
+                                    else
+                                    {
+                                        $InputObject."$($Current.Name)"."$($SubCurrent.Name)" | Get-Member -MemberType NoteProperty | Where-Object { $InputObject."$($Current.Name)"."$($SubCurrent.Name)"."$($_.Name)" } | ForEach-Object {
+                                            Resolve-NuspecProperty -Name $_.Name -Value $InputObject."$($Current.Name)"."$($SubCurrent.Name)"."$($_.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null
+                                        }
+                                    }
                                 }
+                                else { Resolve-NuspecProperty -Name $SubCurrent.Name -Value $InputObject."$($Current.Name)"."$($SubCurrent.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
                             }
-                            else { Resolve-NuspecProperty -Name $SubCurrent.Name -Value $InputObject."$($Current.Name)"."$($SubCurrent.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
                         }
                     }
                     default { Resolve-NuspecProperty -Name $Current.Name -Value $InputObject."$($Current.Name)" -AcceptChocolateyProperties:$AcceptChocolateyProperties | Set-NuspecProperty -Nuspec $Nuspec -AcceptChocolateyProperties:$AcceptChocolateyProperties -ErrorAction SilentlyContinue | Out-Null }
