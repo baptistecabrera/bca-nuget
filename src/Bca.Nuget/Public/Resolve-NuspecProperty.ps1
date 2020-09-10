@@ -10,6 +10,8 @@ function Resolve-NuspecProperty
             A string containing the name of the property to be resolved.
         .PARAMETER Value
             An object containing the value(s) of the property.
+        .PARAMETER AcceptChocolateyProperties
+            A switch specifying whether or not to accept Chocolatey-specific properties.
         .INPUTS
         .OUTPUTS
             System.Management.Automation.PSCustomObject
@@ -44,7 +46,9 @@ function Resolve-NuspecProperty
         [ValidateNotNullOrEmpty()]
         [string] $Name,
         [Parameter(Mandatory = $false)]
-        $Value
+        $Value,
+        [Parameter(Mandatory = $false)]
+        [switch] $AcceptChocolateyProperties
     )
     
     $ResolvedProperty = New-Object -TypeName PSCustomObject
@@ -111,6 +115,11 @@ function Resolve-NuspecProperty
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "licenseUrl" -PassThru | Out-Null
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
         }
+        "^license$"
+        {
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "license" -PassThru | Out-Null
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
+        }
         "iconUrl|IconUri"
         {
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "iconUrl" -PassThru | Out-Null
@@ -135,9 +144,22 @@ function Resolve-NuspecProperty
             if ($Value -like "*.md") { $Value = Get-Content $Value }
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value ($Value -join "`r`n") -PassThru | Out-Null   
         }
+        "^docsUrl$|^mailingListUrl$|^bugTrackerUrl$|^packageSourceUrl$|^projectSourceUrl$"
+        {
+            if ($AcceptChocolateyProperties)
+            {
+                $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value $Name -PassThru | Out-Null
+                $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
+            }
+            else { Write-Warning "Property '$Name' does not match any mapped Nuspec property." }    
+        }
         default { Write-Warning "Property '$Name' does not match any mapped Nuspec property." }
     }
-    if ($ResolvedProperty.Name) { Write-Verbose "Property '$Name' resolved to '$($ResolvedProperty.Name)'." }
-    if ($ResolvedProperty.Value) { Write-Verbose "Value returned for this property is '$($ResolvedProperty.Value)' ($($ResolvedProperty.Value.GetType().Name))." }
+    if ($ResolvedProperty.Name)
+    { 
+        Write-Verbose "Property '$Name' resolved to '$($ResolvedProperty.Name)'."
+        if ($ResolvedProperty.Value) { Write-Verbose "Value returned for this property is '$($ResolvedProperty.Value)' ($($ResolvedProperty.Value.GetType().Name))." }
+    }
+    else { $ResolvedProperty = $null }
     $ResolvedProperty
 }
