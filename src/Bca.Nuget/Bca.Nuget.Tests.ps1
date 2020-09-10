@@ -219,7 +219,7 @@ Describe "Set-NuspecLicense" {
     }
 }
 
-Describe "New-NuGetPackage" {
+Describe "New-NuGetPackage" -Tags "WindowsOnly" {
 
     BeforeAll {
         Write-Host -ForegroundColor Cyan "This test should also confirm that Invoke-NuGetCommand is working as expected."
