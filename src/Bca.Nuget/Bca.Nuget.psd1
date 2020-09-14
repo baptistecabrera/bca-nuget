@@ -92,17 +92,17 @@
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData     = @{
 
-        License    = "GPL-3.0-or-later"
+        License          = "GPL-3.0-or-later"
 
-        Chocolatey = @{
-            docsUrl          = "https://github.com/baptistecabrera/bca-nuget/doc"
-            mailingListUrl   = "https://github.com/baptistecabrera/bca-nuget/issues"
-            bugTrackerUrl    = "https://github.com/baptistecabrera/bca-nuget/issues"
-            packageSourceUrl = "https://github.com/baptistecabrera/bca-nuget/src"
-            projectSourceUrl = "https://github.com/baptistecabrera/bca-nuget/src"
-        }
+        repositoryUrl    = "https://github.com/baptistecabrera/bca-nuget.git"
 
-        PSData     = @{
+        docsUrl          = "https://github.com/baptistecabrera/bca-nuget/tree/master/doc"
+        mailingListUrl   = "https://github.com/baptistecabrera/bca-nuget/issues"
+        bugTrackerUrl    = "https://github.com/baptistecabrera/bca-nuget/issues"
+        packageSourceUrl = "https://github.com/baptistecabrera/bca-nuget/tree/master/src"
+        projectSourceUrl = "https://github.com/baptistecabrera/bca-nuget/tree/master/src"
+
+        PSData           = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
             Tags         = @('Package', 'Packaging', 'PackageManager', 'NuGet')
@@ -117,7 +117,12 @@
             IconUri      = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = '0.1.0:
+            ReleaseNotes = '0.2.0:
+- Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository prpoperty;
+- Resolve-NuspecRepository: new function that resolves a repository object from an URL;
+- Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest.
+
+0.1.0:
 - This version now supports certain Chocolatey-specific properties in ConvertTo-NuspecManifest, Resolve-NuspecProperty and Set-NuspecProperty;
 - Save-NuspecManifest: New function to save a Nuspec manifest to a file;
 - Set-NuspecLicese: Force switch now removes licenseUrl if it had specified;

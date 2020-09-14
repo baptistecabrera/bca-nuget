@@ -131,6 +131,19 @@ function Resolve-NuspecProperty
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
             
         }
+        "repository"
+        {
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "repository" -PassThru | Out-Null
+            switch -Regex ($Name)
+            {
+                "^repository$" { $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null }
+                "repositoryUrl"
+                { 
+                    $Repository = Resolve-NuspecRepository -Uri $Value
+                    $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Repository -PassThru | Out-Null
+                } 
+            }
+        }
         "tags"
         {
             if ($Value.GetType().Name -eq "string") { $Value = $Value.Split(",") -join " " }

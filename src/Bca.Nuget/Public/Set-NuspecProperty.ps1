@@ -131,6 +131,10 @@ function Set-NuspecProperty
                         $Nuspec = Set-NuspecLicense -Type $LicenseType -Value $Value -Nuspec $Nuspec -Force
                     }
                 }
+                "^repository$"
+                {
+                    if (!$AcceptChocolateyProperties) { $Nuspec = $Value | Set-NuspecRepository -Nuspec $Nuspec -Force }
+                }
                 "dependencies"
                 {
                     $Nuspec = Add-NuspecDependency -InputObject $Value -Nuspec $Nuspec

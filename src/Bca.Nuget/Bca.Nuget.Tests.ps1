@@ -22,7 +22,9 @@ Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
     BeforeAll {
         Write-Host -ForegroundColor Cyan "These tests should also confirm that Resolve-NuspecProperty, Set-NuspecProperty and Add-NuspecDependency are working as expected."
         Write-Host -ForegroundColor Cyan "Warning(s) on unmatched properties are expected."
+
         $PSManifest = Join-Path $PSScriptRoot Bca.Nuget.psd1
+        $PSData = Import-PowerShellDataFile -Path $PSManifest
         $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
         $NuspecManifest2 = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget2.nuspec"
         $ChocoManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/bca-nuget.nuspec"
@@ -102,7 +104,7 @@ Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
     It "Converting PS Module Manifest to Chocolatey Nuspec" {
         try
         {
-            Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -AcceptChocolateyProperties | Save-NuspecManifest -Path $ChocoManifest
+            $PSData | ConvertTo-NuspecManifest -AcceptChocolateyProperties | Save-NuspecManifest -Path $ChocoManifest
             $Result = $true
         }
         catch { Write-Error $_ ; $Result = $false }
@@ -111,7 +113,7 @@ Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
 
     It "Testing generated Chocolatey Nuspec file" {
         Test-Path $ChocoManifest | Should -Be $true
-        (Get-NuspecProperty -Name bugTrackerUrl -Path $ChocoManifest).Value | Should -BeExactly "https://github.com/baptistecabrera/bca-nuget/issues"
+        (Get-NuspecProperty -Name bugTrackerUrl -Path $ChocoManifest).Value | Should -BeExactly $PSData.PrivateData.bugTrackerUrl
     }
 
     It "Converting Script File Info to Nuspec" {
@@ -217,6 +219,107 @@ Describe "Set-NuspecLicense" {
         $Nuspec.package.metadata.license.InnerText | Should -BeExactly "License.txt"
         ($Nuspec.package.files.file | Where-Object { $_.src -eq "/License.txt" }).src | Should -BeExactly "/License.txt"
     }
+}
+
+Describe "Resolve-NuspecRepository/Set-NuspecRepository" {
+    BeforeAll {
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
+        $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+        $BaseRepoUrl = "https://github.com/baptistecabrera/bca-nuget"
+    }
+    
+    It "Setting repository from base URL" {
+        try 
+        {
+            $Repository = Resolve-NuspecRepository -Uri $BaseRepoUrl
+            $Nuspec = $Repository | Set-NuspecRepository -Nuspec $Nuspec -Force
+        }
+        catch
+        {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+        }
+        $Repository.Type | Should -BeExactly "git"
+        $Nuspec.package.metadata.repository.type | Should -BeExactly "git"
+        $Repository.Uri | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Nuspec.package.metadata.repository.url | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+    }
+
+    It "Setting repository from #branch" {
+        try 
+        {
+            $Uri = ("{0}.git#master" -f $BaseRepoUrl)
+            $Repository = Resolve-NuspecRepository -Uri $Uri
+            $Nuspec = $Repository | Set-NuspecRepository -Nuspec $Nuspec -Force
+        }
+        catch
+        {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+        }
+        $Repository.Type | Should -BeExactly "git"
+        $Nuspec.package.metadata.repository.type | Should -BeExactly "git"
+        $Repository.Uri | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Nuspec.package.metadata.repository.url | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Repository.Branch | Should -BeExactly "master"
+        $Nuspec.package.metadata.repository.branch | Should -BeExactly "master"
+    }
+
+    It "Setting repository from /tree/develop" {
+        try 
+        {
+            $Uri = ("{0}/tree/develop" -f $BaseRepoUrl)
+            $Repository = Resolve-NuspecRepository -Uri $Uri
+            $Nuspec = $Repository | Set-NuspecRepository -Nuspec $Nuspec -Force
+        }
+        catch
+        {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+        }
+        $Repository.Type | Should -BeExactly "git"
+        $Nuspec.package.metadata.repository.type | Should -BeExactly "git"
+        $Repository.Uri | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Nuspec.package.metadata.repository.url | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Repository.Branch | Should -BeExactly "develop"
+        $Nuspec.package.metadata.repository.branch | Should -BeExactly "develop"
+    }
+
+    It "Setting repository from /commit/commitId" {
+        try 
+        {
+            $Uri = ("{0}/commit/301dfbdd6dc116e3426399acbebb28fe5561351e" -f $BaseRepoUrl)
+            $Repository = Resolve-NuspecRepository -Uri $Uri
+            $Nuspec = $Repository | Set-NuspecRepository -Nuspec $Nuspec -Force
+        }
+        catch
+        {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+        }
+        $Repository.Type | Should -BeExactly "git"
+        $Nuspec.package.metadata.repository.type | Should -BeExactly "git"
+        $Repository.Uri | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Nuspec.package.metadata.repository.url | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Repository.Commit | Should -BeExactly "301dfbdd6dc116e3426399acbebb28fe5561351e"
+        $Nuspec.package.metadata.repository.commit | Should -BeExactly "301dfbdd6dc116e3426399acbebb28fe5561351e"
+    }
+
+    It "Setting repository from /blob/commitId" {
+        try 
+        {
+            $Uri = ("{0}/blob/301dfbdd6dc116e3426399acbebb28fe5561351e" -f $BaseRepoUrl)
+            $Repository = Resolve-NuspecRepository -Uri $Uri
+            $Nuspec = $Repository | Set-NuspecRepository -Nuspec $Nuspec -Force
+        }
+        catch
+        {
+            $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+        }
+        $Repository.Type | Should -BeExactly "git"
+        $Nuspec.package.metadata.repository.type | Should -BeExactly "git"
+        $Repository.Uri | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Nuspec.package.metadata.repository.url | Should -BeExactly ("{0}.git" -f $BaseRepoUrl)
+        $Repository.Commit | Should -BeExactly "301dfbdd6dc116e3426399acbebb28fe5561351e"
+        $Nuspec.package.metadata.repository.commit | Should -BeExactly "301dfbdd6dc116e3426399acbebb28fe5561351e"
+    }
+
 }
 
 Describe "New-NuGetPackage" -Tags "WindowsOnly" {
