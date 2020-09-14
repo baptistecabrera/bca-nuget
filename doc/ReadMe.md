@@ -1,5 +1,5 @@
-# Bca.Nuget `0.1.1`
-Tags: `NuGet` `Package` `PackageManager` `Packaging`
+# Bca.Nuget `0.2.0`
+Tags: `Linux` `MacOS` `NuGet` `Package` `PackageManager` `Packaging` `Windows`
 
 PowerShell module to create and manage NuGet packages.
 
@@ -25,7 +25,7 @@ PowerShell module to create and manage NuGet packages.
 
 ## Release Notes
 0.2.0:
-- Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository prpoperty;
+- Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository, icon and requireLicenseAcceptance prpoperties;
 - Resolve-NuspecRepository: new function that resolves a repository object from an URL;
 - Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest.
 

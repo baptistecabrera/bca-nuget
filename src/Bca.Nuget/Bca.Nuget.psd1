@@ -110,6 +110,9 @@
             # A URL to the license for this module.
             LicenseUri   = 'https://spdx.org/licenses/GPL-3.0-or-later.html'
 
+            # Flag to indicate whether the module requires explicit user acceptance for install/update/save
+            RequireLicenseAcceptance = $false
+
             # A URL to the main website for this project.
             ProjectUri   = 'https://github.com/baptistecabrera/bca-nuget'
 
@@ -118,7 +121,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '0.2.0:
-- Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository prpoperty;
+- Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository, icon and requireLicenseAcceptance prpoperties;
 - Resolve-NuspecRepository: new function that resolves a repository object from an URL;
 - Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest.
 

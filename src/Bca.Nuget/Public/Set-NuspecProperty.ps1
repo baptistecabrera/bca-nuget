@@ -97,7 +97,7 @@ function Set-NuspecProperty
                     if ($Nuspec.package.metadata.version) { $Nuspec.package.metadata.version = "$($Nuspec.package.metadata.version)$($Value)" }
                     else { $Nuspec.package.metadata.version = "$($Value.ToString())" }
                 }
-                "^description$|^summary$|^id$|^title$|^authors$|^owners$|^copyright$|^projectUrl$|^iconUrl$|^tags$|^releaseNotes$"
+                "^description$|^summary$|^id$|^title$|^authors$|^owners$|^copyright$|^projectUrl$|^tags$|^releaseNotes$|^requireLicenseAcceptance$"
                 {
                     if (!$Nuspec.package.metadata.$Name)
                     {
@@ -105,6 +105,33 @@ function Set-NuspecProperty
                         $Nuspec.GetElementsByTagName("metadata").AppendChild($NewMetadata)
                     }
                     $Nuspec.package.metadata.$Name = $Value
+                }
+                "^iconUrl$"
+                {
+                    if (!$Nuspec.package.metadata.icon -or $AcceptChocolateyProperties)
+                    {
+                        if (!$AcceptChocolateyProperties) { Write-Warning "Property 'iconUrl' is being deprecated, consider using 'icon' instead." }
+                        if (!$Nuspec.package.metadata.$Name)
+                        {
+                            $NewMetadata = $Nuspec.CreateElement($Name, $Nuspec.package.xmlns)
+                            $Nuspec.GetElementsByTagName("metadata").AppendChild($NewMetadata)
+                        }
+                        $Nuspec.package.metadata.$Name = $Value
+                    }
+                    else { Write-Warning "Property 'icon' already present, ignoring property 'iconUrl' as it is being deprecated." }
+                }
+                "^icon$"
+                {
+                    if ($AcceptChocolateyProperties) { Write-Warning "Property 'icon' not yet supported by Chocolatey, use 'iconeUrl' instead." }
+                    else 
+                    {
+                        if (!$Nuspec.package.metadata.$Name)
+                        {
+                            $NewMetadata = $Nuspec.CreateElement($Name, $Nuspec.package.xmlns)
+                            $Nuspec.GetElementsByTagName("metadata").AppendChild($NewMetadata)
+                        }
+                        $Nuspec.package.metadata.$Name = $Value
+                    }
                 }
                 "^licenseUrl$"
                 {

@@ -49,7 +49,6 @@ function Set-NuspecRepository
     {
         $NameSpace = New-Object System.Xml.XmlNamespaceManager($Nuspec.NameTable)
         $NameSpace.AddNamespace("ns", $Nuspec.DocumentElement.xmlns)
-        Write-Verbose "toto"
         
         $Repository = $nuspec.SelectSingleNode("//ns:repository", $NameSpace)
         if (!$Repository -or $Force)
