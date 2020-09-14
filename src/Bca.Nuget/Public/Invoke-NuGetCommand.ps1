@@ -11,6 +11,8 @@ function Invoke-NuGetCommand
             A string containing the target of the NuGet command to invoke.
         .PARAMETER NuGetPath
             A string containing the path to the NuGet executable.
+        .PARAMETER NuGetCommand
+            A string containing the command to execute NuGet.
         .PARAMETER Parameters
             An hashtable containing the additionnal parameters to specify to NuGet.
         .PARAMETER Help
@@ -25,42 +27,75 @@ function Invoke-NuGetCommand
             Description
             -----------
             This example will build the package from the manifest, not excluding default content, and output it to D:\packages.
+        .EXAMPLE
+            Invoke-NuGetCommand -Command "restore" -NuGetCommand "nuget"
+
+            Description
+            -----------
+            This example will restore using alias "nuget" as the command (e.g. for non-Windows OS).
+        .EXAMPLE
+            Invoke-NuGetCommand -Command "add" -Target "source https://api.nuget.org/v3/index.json" -Parameters @{ "name" = "NuGet.org" } -NuGetCommand "dotnet nuget"
+
+            Description
+            -----------
+            This example will add Nuget.org as a source using the the dotnet CLI.
         .NOTES
             - This CmdLet does not stop on nuget error, output should be parsed.
-            - This function is Windows compatible only
+            - To use this function on non-Windows OS, use NuGetCommand parameter to specify the command alias or dotnet command.
         .LINK
             https://docs.microsoft.com/en-us/nuget/tools/nuget-exe-cli-reference
     #>
-    [CmdLetBinding()]
+    [CmdLetBinding(DefaultParameterSetName = "FromNugetCommand")]
     param(
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = "FromNugetPath", Mandatory = $true)]
+        [Parameter(ParameterSetName = "FromNugetCommand", Mandatory = $true)]
         [ValidateNotNullOrEmpty()]
         [string] $Command,
-        [Parameter(Mandatory = $false)]
+        [Parameter(ParameterSetName = "FromNugetPath", Mandatory = $false)]
+        [Parameter(ParameterSetName = "FromNugetCommand", Mandatory = $false)]
         [ValidateNotNullOrEmpty()]
         [string] $Target,
-        [Parameter(Mandatory = $false)]
+        [Parameter(ParameterSetName = "FromNugetPath", Mandatory = $false)]
+        [Parameter(ParameterSetName = "FromNugetCommand", Mandatory = $false)]
         [alias("Options")]
         [hashtable] $Parameters, 
-        [Parameter(Mandatory = $false)]
-        [ValidateScript( { Test-Path $_ } )]
+        [Parameter(ParameterSetName = "FromNugetPath", Mandatory = $false)]
         [string] $NuGetPath = (Get-NuGetPath),
-        [Parameter(Mandatory = $false)]
+        [Parameter(ParameterSetName = "FromNugetCommand", Mandatory = $false)]
+        [ValidateNotNullOrEmpty()]
+        [string] $NuGetCommand = "nuget",
+        [Parameter(ParameterSetName = "FromNugetPath", Mandatory = $false)]
+        [Parameter(ParameterSetName = "FromNugetCommand", Mandatory = $false)]
         [switch] $Help
     )
     
     try 
     {
-        if ($NuGetPath -like "*.exe")
+        switch ($PSCmdlet.ParameterSetName)
         {
-            $NuGetExe = Split-Path $NuGetPath -Leaf
-            $NuGetPath = Split-Path $NuGetPath -Parent
+            "FromNugetCommand"
+            {
+                $NuGetPath = ""
+                $Expression = "$($NugetCommand) $Command $Target"
+            }
+            "FromNugetPath"
+            {
+                $NuGetPath = Get-Item $NuGetPath
+                if ($NuGetPath.PSIsContainer)
+                {
+                    $NuGetPath = $NuGetPath.FullName
+                    $NuGetCommand = (Get-ChildItem -Path (Join-Path $NuGetPath.FullName "nuget*.exe") | Sort-Object LastWriteTime -Descending | Select-Object -First 1).BaseName
+                }
+                else
+                { 
+                    $NuGetCommand = Split-Path $NuGetPath.FullName -Leaf
+                    $NuGetPath = Split-Path $NuGetPath.FullName -Parent
+                }
+                $Expression = "./$($NugetCommand) $Command $Target"
+            }
         }
-        else { $NuGetExe = "nuget.exe" }
 
-        $NugetCommand = $NuGetExe.Replace(".exe", "")
-        $Expression = "./$($NugetCommand) $Command $Target"
-        if ($Help) { $Expression += " -h" }
+        if ($Help) { $Expression += " --help" }
         else
         {
             if ($Parameters)
@@ -68,17 +103,22 @@ function Invoke-NuGetCommand
                 $Parameters.Keys | ForEach-Object {
                     if (($Parameters[$_] -eq $true) -or ($Parameters[$_] -eq $false))
                     {
-                        if ($Parameters[$_]) { $Expression += " -$_" }
+                        if ($Parameters[$_])
+                        {
+                            if ($_.Length -eq 1) { $Expression += (" -{0}" -f $_) }
+                            else { $Expression += (" --{0}" -f $_) }
+                        }
                     } 
                     else
                     {
-                        $Expression += " -$_ '$($Parameters[$_])'"
+                        if ($_.Length -eq 1) { $Expression += (" -{0} '{1}'" -f $_, $Parameters[$_]) }
+                        else { $Expression += (" --{0} '{1}'" -f $_, $Parameters[$_]) }
                     }
                 }
             }
         }
         Write-Verbose "Invoking command: $Expression"
-        Push-Location $NuGetPath
+        # if ($NuGetPath) { Push-Location $NuGetPath }
         Invoke-Expression $Expression
     }
     catch

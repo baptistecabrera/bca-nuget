@@ -10,7 +10,13 @@ _Bca.NuGet_ is a PowerShell module used to manage NuGet packages, but more impor
 - _Bca.NuGet_ has been created to answer my needs to streamline my package automation, but I provide it to people who may need such a tool.
 - It may contain bugs or lack some features, in this case, feel free to open an issue, and I'll manage it as best as I can.
 - This _GitHub_ repository is not the primary one, see transparency for more information.
-- Functions that use `nuget` command are Windows-compatible only (for now).
+- Functions that use `nuget` command (such as `New-NuGetPackage`) are natively Windows-compatible only (for now), but there is a workaround:
+  - Install [Mono 4.4.2 or later](https://www.mono-project.com/docs/getting-started/install/), or skip to the last step if [`dotnet` CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/) is sufficient for your needs;
+  - Call the function `Get-NuGetPath`, and create an alias to this command: `alias nuget="mono /path/to/nuget.exe`
+  - Call the function `Invoke-NuGetCommand` by using the `NuGetCommand` parameter with either the alias for `nuget.exe` or `dotnet`, for instance:
+    - `Invoke-NuGetCommand -Command "restore" -NuGetCommand "nuget"`
+    - `Invoke-NuGetCommand -Command "restore" -NuGetCommand "dotnet"`
+    - `Invoke-NuGetCommand -Command "add" -Target "source https://api.nuget.org/v3/index.json" -Parameters @{ "name" = "NuGet.org" } -NuGetCommand "dotnet nuget"`
 
 ## Dependencies
 

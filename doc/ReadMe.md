@@ -25,14 +25,16 @@ PowerShell module to create and manage NuGet packages.
 
 ## Release Notes
 0.2.0:
+- Invoke-NuGetCommand is now cross platform;
 - Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository, icon and requireLicenseAcceptance prpoperties;
 - Resolve-NuspecRepository: new function that resolves a repository object from an URL;
-- Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest.
+- Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest;
+- Now distributed under license GPL 3.0.
 
 0.1.0:
 - This version now supports certain Chocolatey-specific properties in ConvertTo-NuspecManifest, Resolve-NuspecProperty and Set-NuspecProperty;
 - Save-NuspecManifest: New function to save a Nuspec manifest to a file;
-- Set-NuspecLicese: Force switch now removes licenseUrl if it had specified;
+- Set-NuspecLicense: Force switch now removes licenseUrl if it had specified;
 - Get-NuspecProperty: Value now returns an array instead of a list of nodes if multiple (e.g. property name dependencies will return an array of id and version as the value instead of an array of dependency);
 - Bug fixes.
 

@@ -121,6 +121,7 @@
 
             # ReleaseNotes of this module
             ReleaseNotes = '0.2.0:
+- Invoke-NuGetCommand is now cross platform;
 - Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository, icon and requireLicenseAcceptance prpoperties;
 - Resolve-NuspecRepository: new function that resolves a repository object from an URL;
 - Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest;
