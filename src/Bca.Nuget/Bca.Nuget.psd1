@@ -105,7 +105,7 @@
         PSData           = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('Package', 'Packaging', 'PackageManager', 'NuGet')
+            Tags         = @('Package', 'Packaging', 'PackageManager', 'NuGet', "Windows", "Linux", "MacOS")
 
             # A URL to the license for this module.
             LicenseUri   = 'https://spdx.org/licenses/GPL-3.0-or-later.html'
