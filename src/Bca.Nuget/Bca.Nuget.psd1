@@ -51,7 +51,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    RequiredModules = @(@{ ModuleName = "Bca.Spdx" ; ModuleVersion = "0.0.8" })
+    RequiredModules = @(@{ ModuleName = "Bca.Spdx" ; ModuleVersion = "0.1.1" })
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
