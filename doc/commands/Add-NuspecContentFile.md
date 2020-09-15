@@ -6,17 +6,17 @@ Adds a content file in a Nuspec manifest.
 ## Description
 Adds a content file in a Nuspec manifest.
 ## Syntax
-```ps
+```powershell
 Add-NuspecContentFile [-Include] <string> [[-Exclude] <string>] [[-BuildAction] <string>] [-Nuspec] <xml> [-CopyToOutput] [-Flatten] [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Add-NuspecFile -Source "bin\Debug\*.dll" -Destination "lib" -Nuspec $NuspecManifest
 ```
 This example will add a node file with source "bin\Debug\*.dll" and destination "lib" to the manifest, and return the XmlDocument.
 ### Example 2
-```ps
+```powershell
 Add-NuspecFile -Source "tools\**\*.*" -Exclude "**\*.log" -Nuspec $NuspecManifest
 ```
 This example will add a node file with source "tools\**\*.*" excluding log files to the manifest, and return the XmlDocument.
