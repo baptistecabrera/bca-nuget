@@ -22,8 +22,8 @@ _Bca.NuGet_ is a PowerShell module used to manage NuGet packages, but more impor
 
 ## Dependencies
 
-- `Bca.Spdx` version `0.0.8`
-- Although it is not a dependcy, _Bca.NuGet_ uses `Test-Xml` from module `Pscx`, in the function `Test-NuspecManifest`.
+- [`Bca.Spdx`](https://github.com/baptistecabrera/bca-spdx) version `0.0.8` or greater
+- Although it is not a dependcy, _Bca.NuGet_ uses `Test-Xml` from module [`Pscx`](https://github.com/Pscx/Pscx), in the function `Test-NuspecManifest`.
 
 ## Examples
 
