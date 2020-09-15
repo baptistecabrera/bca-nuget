@@ -336,7 +336,7 @@ Describe "New-NuGetPackage" -Tags "WindowsOnly" {
             $Result = $true
             $PackageFile = Join-Path (Split-Path $NuspecManifest -Parent) "$((Get-NuspecProperty -Name id -Nuspec $Nuspec).Value).$((Get-NuspecProperty -Name version -Nuspec $Nuspec).Value).nupkg"
             if (Test-Path $PackageFile) { Remove-Item -Path $PackageFile -Force }
-            New-NuGetPackage -Manifest $NuspecManifest -OutputPath (Split-Path $NuspecManifest -Parent) -Parameters @{ "NoDefaultExcludes" = $true } -ErrorAction Stop | Out-Null
+            New-NuGetPackage -Manifest $NuspecManifest -OutputPath (Split-Path $PackageFile -Parent) -Parameters @{ "NoDefaultExcludes" = $true } -ErrorAction Stop | Out-Null
         }
         catch
         {

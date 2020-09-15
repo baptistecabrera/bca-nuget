@@ -80,22 +80,22 @@ function Invoke-NuGetCommand
             }
             "FromNugetPath"
             {
-                $NuGetPath = Get-Item $NuGetPath
-                if ($NuGetPath.PSIsContainer)
+                $NuGet = Get-Item $NuGetPath
+                if ($NuGet.PSIsContainer)
                 {
-                    $NuGetPath = $NuGetPath.FullName
-                    $NuGetCommand = (Get-ChildItem -Path (Join-Path $NuGetPath.FullName "nuget*.exe") | Sort-Object LastWriteTime -Descending | Select-Object -First 1).BaseName
+                    $NuGetPath = $NuGet.FullName
+                    $NuGetCommand = (Get-ChildItem -Path (Join-Path $NuGet.FullName "nuget*.exe") | Sort-Object LastWriteTime -Descending | Select-Object -First 1).BaseName
                 }
                 else
                 { 
-                    $NuGetCommand = Split-Path $NuGetPath.FullName -Leaf
-                    $NuGetPath = Split-Path $NuGetPath.FullName -Parent
+                    $NuGetCommand = Split-Path $NuGet.FullName -Leaf
+                    $NuGetPath = Split-Path $NuGet.FullName -Parent
                 }
                 $Expression = "./$($NugetCommand) $Command $Target"
             }
         }
 
-        if ($Help) { $Expression += " --help" }
+        if ($Help) { $Expression += " -h" }
         else
         {
             if ($Parameters)
@@ -103,22 +103,14 @@ function Invoke-NuGetCommand
                 $Parameters.Keys | ForEach-Object {
                     if (($Parameters[$_] -eq $true) -or ($Parameters[$_] -eq $false))
                     {
-                        if ($Parameters[$_])
-                        {
-                            if ($_.Length -eq 1) { $Expression += (" -{0}" -f $_) }
-                            else { $Expression += (" --{0}" -f $_) }
-                        }
+                        if ($Parameters[$_]) { $Expression += (" -{0}" -f $_) }
                     } 
-                    else
-                    {
-                        if ($_.Length -eq 1) { $Expression += (" -{0} '{1}'" -f $_, $Parameters[$_]) }
-                        else { $Expression += (" --{0} '{1}'" -f $_, $Parameters[$_]) }
-                    }
+                    else { $Expression += (" -{0} '{1}'" -f $_, $Parameters[$_]) }
                 }
             }
         }
         Write-Verbose "Invoking command: $Expression"
-        # if ($NuGetPath) { Push-Location $NuGetPath }
+        if ($NuGetPath) { Push-Location $NuGetPath }
         Invoke-Expression $Expression
     }
     catch
