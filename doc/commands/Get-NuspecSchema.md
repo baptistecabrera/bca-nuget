@@ -6,12 +6,12 @@ Gets NuGet xsd schema for Nuspec file.
 ## Description
 Gets NuGet xsd schema for Nuspec file from GitHub.
 ## Syntax
-```ps
+```powershell
 Get-NuspecSchema [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Get-NuspecSchema
 ```
 This example connects to GitHub and retrieve xsd schema for Nuspec files.

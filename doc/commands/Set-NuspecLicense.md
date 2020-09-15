@@ -6,7 +6,7 @@ Sets the license information in a Nuspec manifest.
 ## Description
 Sets the license information in a Nuspec manifest.
 ## Syntax
-```ps
+```powershell
 Set-NuspecLicense [-Type] <string> [-Value] <string> [-Nuspec] <xml> [-Force] [<CommonParameters>]
 ```
 ## Parameters

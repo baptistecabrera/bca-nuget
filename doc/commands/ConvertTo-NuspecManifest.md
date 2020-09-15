@@ -6,28 +6,28 @@ Converts an object to a NuspecManifest.
 ## Description
 Converts an object to a NuspecManifest.
 ## Syntax
-```ps
+```powershell
 ConvertTo-NuspecManifest [-InputObject] <Object> [[-DependencyMatch] <Object>] [-AcceptChocolateyProperties] [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 ConvertTo-NuspecManifest -InputObject ((Get-Content .\package.json) | Convert-From-Json)
 ```
 This example will get the content of "package.json" and map properties to create a Nuspec manifest.
 ### Example 2
-```ps
+```powershell
 Import-PowerShellDataFile -Path .\MyModule.psd1 | ConvertTo-NuspecManifest
 ```
 This example will import the PowerShell module manifest "MyModule.psd1" and map properties to create a Nuspec manifest.
 Import-PowerShellDataFile only works with PowerShell v5+, for v4 use Import-LocalizedData.
 ### Example 3
-```ps
+```powershell
 Get-Module MyModule | ConvertTo-NuspecManifest
 ```
 This example will get the PowerShell module MyModule and map properties to create a Nuspec manifest.
 ### Example 4
-```ps
+```powershell
 Test-ScriptFileInfo C:\MyScript.ps1 | ConvertTo-NuspecManifest
 ```
 This example will get the script file info of the PowerShell script MyScript.ps1 and map properties to create a Nuspec manifest.

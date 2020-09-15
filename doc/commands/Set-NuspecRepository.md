@@ -6,7 +6,7 @@ Sets the repository information in a Nuspec manifest.
 ## Description
 Sets the repository information in a Nuspec manifest.
 ## Syntax
-```ps
+```powershell
 Set-NuspecRepository [-Uri] <uri> [[-Type] <string>] [[-Branch] <string>] [[-Commit] <string>] [-Nuspec] <xml> [-Force] [<CommonParameters>]
 ```
 ## Parameters

@@ -7,16 +7,16 @@ Gets a propertyand its value in a Nuspec manifest.
 Gets a propertyand its value in a Nuspec manifest.
 ## Syntax
 ### FromXml
-```ps
+```powershell
 Get-NuspecProperty -Name <string> -Nuspec <xml> [<CommonParameters>]
 ```
 ### FromFile
-```ps
+```powershell
 Get-NuspecProperty -Name <string> -Path <string> [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Get-NuspecProperty -Name "version"
 ```
 This example will return the property for "version" and its value.

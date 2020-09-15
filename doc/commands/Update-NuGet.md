@@ -6,12 +6,12 @@ Updates NuGet.exe.
 ## Description
 Updates NuGet.exe.
 ## Syntax
-```ps
+```powershell
 Update-NuGet [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Update-NuGet
 ```
 This example will install the last version of NuGet.exe.

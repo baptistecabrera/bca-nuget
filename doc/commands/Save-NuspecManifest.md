@@ -6,17 +6,17 @@ Saves a Nuspec manifest.
 ## Description
 Saves a Nuspec manifest to a file.
 ## Syntax
-```ps
+```powershell
 Save-NuspecManifest [-Path] <string> [-Nuspec] <xml> [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Save-NuspecManifest -Nuspec $Nuspec -Path .\mypackage.nuspec
 ```
 This example will save the Nuspec manifest in the file mypackage.nuscpec.
 ### Example 2
-```ps
+```powershell
 Import-PowerShellDataFile .\MyModule.psd1 | ConvertTo-NuspecManifest | Save-NuspecManifest -Path .\mymodule.nuspec
 ```
 This example will save the Nuspec manifest in the file mypackage.nuscpec.

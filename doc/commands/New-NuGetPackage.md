@@ -6,22 +6,22 @@ Builds a NuGet package.
 ## Description
 Builds a NuGet package from Nuspec manifest.
 ## Syntax
-```ps
+```powershell
 New-NuGetPackage [-Manifest] <string> [[-NuGetPath] <string>] [[-OutputPath] <string>] [[-Parameters] <hashtable>] [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 New-NuGetPackage -Manifest .\package.nuspec
 ```
 This example will build the package from the manifest.
 ### Example 2
-```ps
+```powershell
 New-NuGetPackage -Manifest .\package.nuspec -OutputPath D:\packages
 ```
 This example will build the package from the manifest and output it to D:\packages.
 ### Example 3
-```ps
+```powershell
 New-NuGetPackage -Manifest .\package.nuspec -Parameters @{ "NoDefaultExcludes" = $true ; "OutputDirectory" = "D:\packages" }
 ```
 This example will build the package from the manifest, not excluding default content, and output it to D:\packages.

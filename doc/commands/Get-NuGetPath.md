@@ -6,12 +6,12 @@ Gets the executable path of NuGet.exe.
 ## Description
 Gets the executable path of NuGet.exe.
 ## Syntax
-```ps
+```powershell
 Get-NuGetPath [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Get-NuGetPath
 ```
 This example will return the path of NuGet.exe.

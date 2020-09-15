@@ -29,7 +29,7 @@ PowerShell module to create and manage NuGet packages.
 - Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository, icon and requireLicenseAcceptance prpoperties;
 - Resolve-NuspecRepository: new function that resolves a repository object from an URL;
 - Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest;
-- Now distributed under license GPL 3.0.
+- Now distributed under license MIT.
 
 0.1.0:
 - This version now supports certain Chocolatey-specific properties in ConvertTo-NuspecManifest, Resolve-NuspecProperty and Set-NuspecProperty;

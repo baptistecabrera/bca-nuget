@@ -7,26 +7,26 @@ Sets a property value in a Nuspec manifest.
 Sets a property value in a Nuspec manifest.
 ## Syntax
 ### FromXml
-```ps
+```powershell
 Set-NuspecProperty -Name <string> -Value <Object> -Nuspec <xml> [-AcceptChocolateyProperties] [-Force] [<CommonParameters>]
 ```
 ### FromFile
-```ps
+```powershell
 Set-NuspecProperty -Name <string> -Value <Object> -Path <string> [-AcceptChocolateyProperties] [-Force] [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Set-NuspecProperty -Name "version" -Value "1.0.0" -Path .\package.nuspec
 ```
 This example will set the property "version" value to "1.0.0", save the file, and return the manifest XmlDocument.
 ### Example 2
-```ps
+```powershell
 Set-NuspecProperty -Name "dependencies" -Value @( "MyModule1", @{ ModuleName = "MyModule2" ; ModuleVersion = "1.0.0" }, @{ ModuleName = "MyModule3" ; RequiredVersion = "1.0.0" } ) -Nuspec $NuspecManifest
 ```
 This example set multiple "dependency" properties under the property "dependencies" for each value in value and return the manifest XmlDocument.
 ### Example 3
-```ps
+```powershell
 Resolve-NuspecProperty -Name "name" -Value "value" | Set-NuspecProperty -Nuspec $NuspecManifest
 ```
 This example will resolve the property "name" and sets its value, then return the manifest XmlDocument.

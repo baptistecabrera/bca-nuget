@@ -92,7 +92,7 @@
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData     = @{
 
-        License          = "GPL-3.0-or-later"
+        License          = "MIT"
 
         repositoryUrl    = "https://github.com/baptistecabrera/bca-nuget.git"
 
@@ -108,7 +108,7 @@
             Tags         = @('Package', 'Packaging', 'PackageManager', 'NuGet', "Windows", "Linux", "MacOS")
 
             # A URL to the license for this module.
-            LicenseUri   = 'https://spdx.org/licenses/GPL-3.0-or-later.html'
+            LicenseUri   = 'https://github.com/baptistecabrera/bca-nuget/blob/master/LICENSE'
 
             # Flag to indicate whether the module requires explicit user acceptance for install/update/save
             RequireLicenseAcceptance = $false
@@ -125,7 +125,7 @@
 - Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository, icon and requireLicenseAcceptance prpoperties;
 - Resolve-NuspecRepository: new function that resolves a repository object from an URL;
 - Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest;
-- Now distributed under license GPL 3.0.
+- Now distributed under license MIT.
 
 0.1.0:
 - This version now supports certain Chocolatey-specific properties in ConvertTo-NuspecManifest, Resolve-NuspecProperty and Set-NuspecProperty;

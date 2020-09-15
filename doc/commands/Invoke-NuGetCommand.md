@@ -7,26 +7,26 @@ Invokes a NuGet command.
 Invokes a NuGet command.
 ## Syntax
 ### FromNugetCommand (default)
-```ps
+```powershell
 Invoke-NuGetCommand -Command <string> [-Target <string>] [-Parameters <hashtable>] [-NuGetCommand <string>] [-Help] [<CommonParameters>]
 ```
 ### FromNugetPath
-```ps
+```powershell
 Invoke-NuGetCommand -Command <string> [-Target <string>] [-Parameters <hashtable>] [-NuGetPath <string>] [-Help] [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Invoke-NuGetCommand -Command "pack" -Target ".\package.nuspec" -Parameters @{ "NoDefaultExcludes" = $true ; "OutputDirectory" = "D:\packages" }
 ```
 This example will build the package from the manifest, not excluding default content, and output it to D:\packages.
 ### Example 2
-```ps
+```powershell
 Invoke-NuGetCommand -Command "restore" -NuGetCommand "nuget"
 ```
 This example will restore using alias "nuget" as the command (e.g. for non-Windows OS).
 ### Example 3
-```ps
+```powershell
 Invoke-NuGetCommand -Command "add" -Target "source https://api.nuget.org/v3/index.json" -Parameters @{ "name" = "NuGet.org" } -NuGetCommand "dotnet nuget"
 ```
 This example will add Nuget.org as a source using the the dotnet CLI.
