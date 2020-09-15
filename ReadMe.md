@@ -1,4 +1,6 @@
 # Bca.NuGet
+![PowerShell Gallery](https://img.shields.io/powershellgallery/p/Bca.Nuget)
+![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Bca.Nuget?color=informational) ![Nuget](https://img.shields.io/nuget/v/Bca.Nuget?color=informational) ![Chocolatey Version](https://img.shields.io/chocolatey/v/bca-nuget?color=informational) 
 
 ## Description
 
