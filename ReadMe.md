@@ -50,6 +50,13 @@ Find extended documentation [at this page](doc/ReadMe.md).
 
 ## How to install
 
+### The easiest way
+
+In a PowerShell console, run the following:
+```ps
+Find-Module -Name Bca.Nuget | Install-Module
+```
+
 ### Package
 
 _Bca.NuGet_ is available as a package from _[PowerShell Gallery](https://www.powershellgallery.com/)_, _[NuGet](https://www.nuget.org/)_ and _[Chocolatey](https://chocolatey.org/)_*, please refer to each specific plateform on how to install the package.
