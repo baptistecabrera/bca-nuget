@@ -1,7 +1,7 @@
 # Bca.NuGet
-![PowerShell Gallery](https://img.shields.io/powershellgallery/p/Bca.Nuget?logo=powershell&logoColor=white) [![License: MIT](https://img.shields.io/github/license/baptistecabrera/bca-nuget?logo=open-source-initiative&logoColor=white)](https://opensource.org/licenses/MIT)
+![Platform](https://img.shields.io/powershellgallery/p/Bca.Nuget?logo=powershell&logoColor=white) [![License: MIT](https://img.shields.io/github/license/baptistecabrera/bca-nuget?logo=open-source-initiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
-[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/baptistecabrera/bca-nuget?logo=github&logoColor=white)](https://github.com/baptistecabrera/bca-nuget/releases) [![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Bca.Nuget?color=informational&logo=powershell&logoColor=white)](https://www.powershellgallery.com/packages/bca.Nuget) [![Nuget](https://img.shields.io/nuget/v/Bca.Nuget?color=informational&logo=nuget&logoColor=white)](https://www.nuget.org/packages/Bca.Nuget/) [![Chocolatey Version](https://img.shields.io/chocolatey/v/bca-nuget?color=informational&logo=chocolatey&logoColor=white)](https://chocolatey.org/packages/bca-nuget)
+[![GitHub Release](https://img.shields.io/github/v/tag/baptistecabrera/bca-nuget?logo=github&logoColor=white&label=release)](https://github.com/baptistecabrera/bca-nuget/releases) [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/Bca.Nuget?color=informational&logo=powershell&logoColor=white)](https://www.powershellgallery.com/packages/bca.Nuget) [![Nuget](https://img.shields.io/nuget/v/Bca.Nuget?color=informational&logo=nuget&logoColor=white)](https://www.nuget.org/packages/Bca.Nuget/) [![Chocolatey](https://img.shields.io/chocolatey/v/bca-nuget?color=informational&logo=chocolatey&logoColor=white)](https://chocolatey.org/packages/bca-nuget)
 
 ## Description
 
