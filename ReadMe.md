@@ -1,7 +1,7 @@
 # Bca.NuGet
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/baptistecabrera/bca-nuget?logo=github&logoColor=white) ![PowerShell Gallery](https://img.shields.io/powershellgallery/p/Bca.Nuget?logo=powershell&logoColor=white) ![GitHub](https://img.shields.io/github/license/baptistecabrera/bca-nuget?logo=github&logoColor=white)
+![PowerShell Gallery](https://img.shields.io/powershellgallery/p/Bca.Nuget?logo=powershell&logoColor=white) ![GitHub](https://img.shields.io/github/license/baptistecabrera/bca-nuget?logo=github&logoColor=white)
 
-![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Bca.Nuget?color=informational&logo=powershell&logoColor=white) ![Nuget](https://img.shields.io/nuget/v/Bca.Nuget?color=informational&logo=nuget&logoColor=white) ![Chocolatey Version](https://img.shields.io/chocolatey/v/bca-nuget?color=informational&logo=chocolatey&logoColor=white) 
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/baptistecabrera/bca-nuget?logo=github&logoColor=white) ![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Bca.Nuget?color=informational&logo=powershell&logoColor=white) ![Nuget](https://img.shields.io/nuget/v/Bca.Nuget?color=informational&logo=nuget&logoColor=white) ![Chocolatey Version](https://img.shields.io/chocolatey/v/bca-nuget?color=informational&logo=chocolatey&logoColor=white) 
 
 ## Description
 
