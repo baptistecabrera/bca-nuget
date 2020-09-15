@@ -30,19 +30,19 @@ _Bca.NuGet_ is a PowerShell module used to manage NuGet packages, but more impor
 
 ### Convert a PS Module Manifest
 
-```ps
+```powershell
 Import-PowerShellDataFile -Path .\MyModule.psd1 | ConvertTo-NuspecManifest | Save-NuspectManifest -Path "C:\MyModule.nuspec"
 ```
 
 ### Convert a PS Module Object
 
-```ps
+```powershell
 Get-Module -Name MyModule | ConvertTo-NuspecManifest | Save-NuspectManifest -Path "C:\MyModule.nuspec"
 ```
 
 ### Convert a PS Script Info
 
-```ps
+```powershell
 Test-ScriptFileInfo C:\MyScript.ps1 | ConvertTo-NuspecManifest | Save-NuspectManifest -Path "C:\MyScript.nuspec"
 ```
 
@@ -54,7 +54,7 @@ Find extended documentation [at this page](doc/ReadMe.md).
 ### The easiest way
 
 In a PowerShell console, run the following:
-```ps
+```powershell
 Find-Module -Name Bca.Nuget | Install-Module
 ```
 
