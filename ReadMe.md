@@ -86,7 +86,7 @@ _Please not that to date I am the only developper for this module._
 [![Build Status](https://dev.azure.com/baptistecabrera/Bca/_apis/build/status/Build/Bca.Nuget?repoName=bca-nuget&branchName=master)](https://dev.azure.com/baptistecabrera/Bca/_build/latest?definitionId=15&repoName=bca-nuget&branchName=master)
 
 The CI is an Azure DevOps build pipeline that will:
-- Test the module with _[Pester](https://pester.dev/)_ tests;
+- Test the module and does code coverage with _[Pester](https://pester.dev/)_;
 - Run the _[PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)_;
 - Mirror the repository to GitHub
 
