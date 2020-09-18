@@ -392,6 +392,7 @@ Describe "Test-NuspecManifest" {
     It "Testing Nuspec Manifest from Path" {
         try
         {
+            Import-Module Pscx -Force
             $Result = Test-NuspecManifest -Path $NuspecManifest
         }
         catch
@@ -404,6 +405,7 @@ Describe "Test-NuspecManifest" {
     It "Testing Nuspec Manifest from Nuspec" {
         try
         {
+            Import-Module Pscx -Force
             $Result = Test-NuspecManifest -Nuspec $Nuspec
         }
         catch
