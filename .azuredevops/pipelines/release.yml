@@ -6,7 +6,7 @@ parameters:
 - name: chocoPub
   displayName: Publish Chocolatey Package
   type: boolean
-  default: false
+  default: true
 - name: psGalPub
   displayName: Publish to PS Gallery
   type: boolean
@@ -14,7 +14,7 @@ parameters:
 - name: gitHubPub
   displayName: Publish to GitHub Packages
   type: boolean
-  default: false
+  default: true
 - name: testWindows
   displayName: Test on Windows
   type: boolean
