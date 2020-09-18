@@ -1,17 +1,18 @@
 # Install-NuGet
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Installs NuGet.exe.
 ## Description
 Installs NuGet.exe.
 ## Syntax
-```ps
+```powershell
 Install-NuGet [-Force] [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Install-NuGet
 ```
 This example will install NuGet.exe.

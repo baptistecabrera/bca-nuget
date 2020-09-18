@@ -1,22 +1,23 @@
 # Save-NuspecManifest
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Saves a Nuspec manifest.
 ## Description
 Saves a Nuspec manifest to a file.
 ## Syntax
-```ps
+```powershell
 Save-NuspecManifest [-Path] <string> [-Nuspec] <xml> [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Save-NuspecManifest -Nuspec $Nuspec -Path .\mypackage.nuspec
 ```
 This example will save the Nuspec manifest in the file mypackage.nuscpec.
 ### Example 2
-```ps
+```powershell
 Import-PowerShellDataFile .\MyModule.psd1 | ConvertTo-NuspecManifest | Save-NuspecManifest -Path .\mymodule.nuspec
 ```
 This example will save the Nuspec manifest in the file mypackage.nuscpec.
@@ -44,9 +45,11 @@ An XmlDocument containing the Nuspec manifest.
 
 ## Inputs
 **System.Xml.XmlDocument**
+
 Accepts an XmlDocument containing the manifest.
 ## Outputs
 **System.String**
+
 Returns a string containing the path to the manifest file
 ## Related Links
 - [ConvertTo-NuspecManifest](ConvertTo-NuspecManifest.md)
