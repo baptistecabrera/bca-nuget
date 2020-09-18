@@ -53,7 +53,7 @@ function Test-NuspecManifest
         $CleanTmp = $false
         if ($PSCmdlet.ParameterSetName -eq "FromXml")
         {
-            Write-Verbose "Saving Nuspec xml in a temporary location ($(([System.IO.Path]::GetTempPath()))\temp.nuspec)."
+            Write-Verbose "Saving Nuspec xml in a temporary location ($(([System.IO.Path]::GetTempPath()))/temp.nuspec)."
             $NuspecPath = Join-Path ([System.IO.Path]::GetTempPath()) temp.nuspec
             $Nuspec.Save($NuspecPath)
             $CleanTmp = $true
@@ -61,7 +61,7 @@ function Test-NuspecManifest
         }
         if (!(Test-Path $Schema))
         {
-            Write-Verbose "Saving Nuspec schema in a temporary location ($(([System.IO.Path]::GetTempPath()))\nuspec.xsd)."
+            Write-Verbose "Saving Nuspec schema in a temporary location ($(([System.IO.Path]::GetTempPath()))/nuspec.xsd)."
             $XsdPath = Join-Path ([System.IO.Path]::GetTempPath()) nuspec.xsd
             $Schema | Out-File $XsdPath -Encoding utf8
             $Schema = $XsdPath
