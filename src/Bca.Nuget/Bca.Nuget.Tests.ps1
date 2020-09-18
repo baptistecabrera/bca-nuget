@@ -380,7 +380,7 @@ Describe "New-NuGetPackage" -Tags "WindowsOnly" {
     }
 }
 
-Describe "Test-NuspecManifest" {
+Describe "Test-NuspecManifest" -tags "WindowsOnly" {
 
     BeforeAll {
         $Pscx = Get-Module -Name Pscx -ListAvailable
