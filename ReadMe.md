@@ -1,7 +1,7 @@
 # Bca.NuGet
-![PowerShell Gallery](https://img.shields.io/powershellgallery/p/Bca.Nuget?logo=powershell&logoColor=white) ![GitHub](https://img.shields.io/github/license/baptistecabrera/bca-nuget?logo=open-source-initiative&logoColor=white)
+![Platform](https://img.shields.io/powershellgallery/p/Bca.Nuget?logo=powershell&logoColor=white) [![License: MIT](https://img.shields.io/github/license/baptistecabrera/bca-nuget?logo=open-source-initiative&logoColor=white)](https://opensource.org/licenses/MIT)
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/baptistecabrera/bca-nuget?logo=github&logoColor=white) ![PowerShell Gallery Version](https://img.shields.io/powershellgallery/v/Bca.Nuget?color=informational&logo=powershell&logoColor=white) ![Nuget](https://img.shields.io/nuget/v/Bca.Nuget?color=informational&logo=nuget&logoColor=white) ![Chocolatey Version](https://img.shields.io/chocolatey/v/bca-nuget?color=informational&logo=chocolatey&logoColor=white) 
+[![GitHub Release](https://img.shields.io/github/v/tag/baptistecabrera/bca-nuget?logo=github&logoColor=white&label=release)](https://github.com/baptistecabrera/bca-nuget/releases) [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/Bca.Nuget?color=informational&logo=powershell&logoColor=white)](https://www.powershellgallery.com/packages/bca.Nuget) [![Nuget](https://img.shields.io/nuget/v/Bca.Nuget?color=informational&logo=nuget&logoColor=white)](https://www.nuget.org/packages/Bca.Nuget/) [![Chocolatey](https://img.shields.io/chocolatey/v/bca-nuget?color=informational&logo=chocolatey&logoColor=white)](https://chocolatey.org/packages/bca-nuget)
 
 ## Description
 
@@ -86,7 +86,7 @@ _Please not that to date I am the only developper for this module._
 [![Build Status](https://dev.azure.com/baptistecabrera/Bca/_apis/build/status/Build/Bca.Nuget?repoName=bca-nuget&branchName=master)](https://dev.azure.com/baptistecabrera/Bca/_build/latest?definitionId=15&repoName=bca-nuget&branchName=master)
 
 The CI is an Azure DevOps build pipeline that will:
-- Test the module with _[Pester](https://pester.dev/)_ tests;
+- Test the module and does code coverage with _[Pester](https://pester.dev/)_;
 - Run the _[PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)_;
 - Mirror the repository to GitHub
 

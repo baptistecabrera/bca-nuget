@@ -17,6 +17,39 @@ Describe "Module" {
     }
 }
 
+Describe "Install-NuGet/Update-NuGet" {
+    It "Installing NuGet" {
+        try
+        {
+            Install-NuGet
+            $Result = $true
+        }
+        catch { $Result = $false }
+        $Result | Should -Be $true
+    }
+
+    It "Updating NuGet" {
+        try
+        {
+            Update-NuGet
+            $Result = $true
+        }
+        catch { $Result = $false }
+        $Result | Should -Be $true
+    }
+}
+
+Describe "Get-NuspecSchema" {
+    It "Getting Nuspec Schema" {
+        try
+        {
+            $Schema = Get-NuspecSchema
+            $Result = $true
+        }
+        catch { $Result = $false }
+        $Result | Should -Be $true
+    }
+}
 Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
 
     BeforeAll {
@@ -69,7 +102,7 @@ Describe "ConvertTo-NuspecManifest/Save-NuspecManifest" {
     It "Converting PS Module Manifest to Nuspec" {
         try
         {
-            Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match | Save-NuspecManifest -Path $NuspecManifest
+            Import-PowerShellDataFile -Path $PSManifest | ConvertTo-NuspecManifest -DependencyMatch $Match | Save-NuspecManifest -Path (Split-Path $NuspecManifest -Parent)
             $Result = $true
         }
         catch { Write-Error $_ ; $Result = $false }
@@ -336,7 +369,7 @@ Describe "New-NuGetPackage" -Tags "WindowsOnly" {
             $Result = $true
             $PackageFile = Join-Path (Split-Path $NuspecManifest -Parent) "$((Get-NuspecProperty -Name id -Nuspec $Nuspec).Value).$((Get-NuspecProperty -Name version -Nuspec $Nuspec).Value).nupkg"
             if (Test-Path $PackageFile) { Remove-Item -Path $PackageFile -Force }
-            New-NuGetPackage -Manifest $NuspecManifest -OutputPath (Split-Path $NuspecManifest -Parent) -Parameters @{ "NoDefaultExcludes" = $true } -ErrorAction Stop | Out-Null
+            New-NuGetPackage -Manifest $NuspecManifest -OutputPath (Split-Path $PackageFile -Parent) -Parameters @{ "NoDefaultExcludes" = $true } -ErrorAction Stop | Out-Null
         }
         catch
         {
@@ -344,6 +377,71 @@ Describe "New-NuGetPackage" -Tags "WindowsOnly" {
         }
         $Result | Should -Be $true
         (Test-Path $PackageFile) | Should -Be $true
+    }
+}
+
+Describe "Test-NuspecManifest" {
+
+    BeforeAll {
+        $Pscx = Get-Module -Name Pscx -ListAvailable
+        if (!$Pscx) { Find-Module Pscx | Install-Module -Scope CurrentUser -AllowClobber -Force }
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
+        $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+    }
+
+    It "Testing Nuspec Manifest from Path" {
+        try
+        {
+            $Result = Test-NuspecManifest -Path $NuspecManifest
+        }
+        catch
+        {
+            $Result = $false
+        }
+        $Result | Should -Be $true
+    }
+
+    It "Testing Nuspec Manifest from Nuspec" {
+        try
+        {
+            $Result = Test-NuspecManifest -Nuspec $Nuspec
+        }
+        catch
+        {
+            $Result = $false
+        }
+        $Result | Should -Be $true
+    }
+}
+
+Describe "Add-NuspecContentFile" {
+
+    BeforeAll {
+        $NuspecManifest = Join-Path ([System.IO.Path]::GetTempPath()) "Bca.Nuget/Bca.Nuget.nuspec"
+        $Nuspec = [xml](Get-Content -Path $NuspecManifest)
+
+        $Include = "**/*.ps1"
+        $Exclude = "**/*.exe"
+        $BuildAction = "none"
+    }
+
+    It "Adding content files" {
+        try
+        {
+            $Nuspec = Add-NuspecContentFile -Include $Include -Exclude $Exclude -BuildAction $BuildAction -CopyToOutput -Flatten -Nuspec $Nuspec
+            $ContentFiles = (Get-NuspecProperty -Nuspec $Nuspec -Name contentFiles).Value
+            $Result = $true
+        }
+        catch
+        {
+            $Result = $false
+        }
+        $Result | Should -Be $true
+        $ContentFiles.include | Should -BeExactly $Include
+        $ContentFiles.exclude | Should -BeExactly $Exclude
+        $ContentFiles.buildAction | Should -BeExactly $BuildAction
+        $ContentFiles.copyToOutput | Should -BeExactly $true
+        $ContentFiles.flatten | Should -BeExactly $true
     }
 }
 
