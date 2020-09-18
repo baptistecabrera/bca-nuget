@@ -120,9 +120,19 @@ function Resolve-NuspecProperty
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "license" -PassThru | Out-Null
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
         }
+        "^requireLicenseAcceptance$"
+        {
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "requireLicenseAcceptance" -PassThru | Out-Null
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value.ToString().ToLower() -PassThru | Out-Null
+        }
         "iconUrl|IconUri"
         {
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "iconUrl" -PassThru | Out-Null
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
+        }
+        "^icon$"
+        {
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "icon" -PassThru | Out-Null
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
         }
         "dependencies|RequiredModules|RequiredScripts"
@@ -130,6 +140,19 @@ function Resolve-NuspecProperty
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "dependencies" -PassThru | Out-Null
             $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null
             
+        }
+        "repository"
+        {
+            $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Name" -Value "repository" -PassThru | Out-Null
+            switch -Regex ($Name)
+            {
+                "^repository$" { $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Value -PassThru | Out-Null }
+                "repositoryUrl"
+                { 
+                    $Repository = Resolve-NuspecRepository -Uri $Value
+                    $ResolvedProperty | Add-Member -MemberType NoteProperty -Name "Value" -Value $Repository -PassThru | Out-Null
+                } 
+            }
         }
         "tags"
         {

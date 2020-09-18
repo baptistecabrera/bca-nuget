@@ -1,17 +1,18 @@
 # Get-NuGetPath
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Gets the executable path of NuGet.exe.
 ## Description
 Gets the executable path of NuGet.exe.
 ## Syntax
-```ps
+```powershell
 Get-NuGetPath [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Get-NuGetPath
 ```
 This example will return the path of NuGet.exe.
@@ -19,6 +20,8 @@ This example will return the path of NuGet.exe.
 ## Inputs
 **None**
 
+
 ## Outputs
 **System.String**
+
 Returns a string containing the path to NuGet.exe.

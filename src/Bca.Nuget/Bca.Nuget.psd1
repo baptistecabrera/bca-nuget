@@ -12,7 +12,7 @@
     RootModule      = 'Bca.Nuget'
 
     # Version number of this module.
-    ModuleVersion   = '0.1.1'
+    ModuleVersion   = '0.2.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -30,10 +30,10 @@
     Copyright       = '(c) 2020 Bca. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description     = 'PowerShell module to create and manage NuGet packages.'
+    Description     = 'PowerShell module to create and manage Nuspec manifests and NuGet packages.'
 
     # Minimum version of the Windows PowerShell engine required by this module
-    # PowerShellVersion = ''
+    PowerShellVersion = '5.1'
 
     # Name of the Windows PowerShell host required by this module
     # PowerShellHostName = ''
@@ -51,7 +51,7 @@
     # ProcessorArchitecture = ''
 
     # Modules that must be imported into the global environment prior to importing this module
-    RequiredModules = @(@{ ModuleName = "Bca.Spdx" ; ModuleVersion = "0.0.8" })
+    RequiredModules = @(@{ ModuleName = "Bca.Spdx" ; ModuleVersion = "0.1.1" })
 
     # Assemblies that must be loaded prior to importing this module
     # RequiredAssemblies = @()
@@ -92,23 +92,26 @@
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData     = @{
 
-        License    = "GPL-3.0-or-later"
+        License          = "MIT"
 
-        Chocolatey = @{
-            docsUrl          = "https://github.com/baptistecabrera/bca-nuget/doc"
-            mailingListUrl   = "https://github.com/baptistecabrera/bca-nuget/issues"
-            bugTrackerUrl    = "https://github.com/baptistecabrera/bca-nuget/issues"
-            packageSourceUrl = "https://github.com/baptistecabrera/bca-nuget/src"
-            projectSourceUrl = "https://github.com/baptistecabrera/bca-nuget/src"
-        }
+        repositoryUrl    = "https://github.com/baptistecabrera/bca-nuget.git"
 
-        PSData     = @{
+        docsUrl          = "https://github.com/baptistecabrera/bca-nuget/tree/master/doc"
+        mailingListUrl   = "https://github.com/baptistecabrera/bca-nuget/issues"
+        bugTrackerUrl    = "https://github.com/baptistecabrera/bca-nuget/issues"
+        packageSourceUrl = "https://github.com/baptistecabrera/bca-nuget/tree/master/src"
+        projectSourceUrl = "https://github.com/baptistecabrera/bca-nuget/tree/master/src"
+
+        PSData           = @{
 
             # Tags applied to this module. These help with module discovery in online galleries.
-            Tags         = @('Package', 'Packaging', 'PackageManager', 'NuGet')
+            Tags         = @('Package', 'Packaging', 'PackageManager', 'NuGet', "Windows", "Linux", "MacOS")
 
             # A URL to the license for this module.
-            LicenseUri   = 'https://spdx.org/licenses/GPL-3.0-or-later.html'
+            LicenseUri   = 'https://github.com/baptistecabrera/bca-nuget/blob/master/LICENSE'
+
+            # Flag to indicate whether the module requires explicit user acceptance for install/update/save
+            RequireLicenseAcceptance = $false
 
             # A URL to the main website for this project.
             ProjectUri   = 'https://github.com/baptistecabrera/bca-nuget'
@@ -117,10 +120,17 @@
             IconUri      = ''
 
             # ReleaseNotes of this module
-            ReleaseNotes = '0.1.0:
+            ReleaseNotes = '0.2.0:
+- Invoke-NuGetCommand is now cross platform;
+- Resolve-Nuspecproperty and Set-NuspecProperty now supporting repository, icon and requireLicenseAcceptance prpoperties;
+- Resolve-NuspecRepository: new function that resolves a repository object from an URL;
+- Set-NuspecRepository: new function that sets the repository property to a Nuspec manifest;
+- Now distributed under license MIT.
+
+0.1.0:
 - This version now supports certain Chocolatey-specific properties in ConvertTo-NuspecManifest, Resolve-NuspecProperty and Set-NuspecProperty;
 - Save-NuspecManifest: New function to save a Nuspec manifest to a file;
-- Set-NuspecLicese: Force switch now removes licenseUrl if it had specified;
+- Set-NuspecLicense: Force switch now removes licenseUrl if it had specified;
 - Get-NuspecProperty: Value now returns an array instead of a list of nodes if multiple (e.g. property name dependencies will return an array of id and version as the value instead of an array of dependency);
 - Bug fixes.
 '

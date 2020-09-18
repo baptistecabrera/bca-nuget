@@ -1,12 +1,13 @@
 # Set-NuspecLicense
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Sets the license information in a Nuspec manifest.
 ## Description
 Sets the license information in a Nuspec manifest.
 ## Syntax
-```ps
+```powershell
 Set-NuspecLicense [-Type] <string> [-Value] <string> [-Nuspec] <xml> [-Force] [<CommonParameters>]
 ```
 ## Parameters
@@ -54,9 +55,11 @@ A switch sepecifying whether or not to override license and/or licenseUrl if it 
 
 ## Inputs
 **System.Object**
+
 Accepts an object containing the Name and Value as an input from the pipeline.
 ## Outputs
 **System.Xml.XmlDocument**
+
 Returns an XmlDocument containing the manifest.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)

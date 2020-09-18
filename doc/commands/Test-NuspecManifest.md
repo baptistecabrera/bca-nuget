@@ -1,5 +1,6 @@
 # Test-NuspecManifest
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Tests a Nuspec manifest.
@@ -7,21 +8,21 @@ Tests a Nuspec manifest.
 Tests a Nuspec manifest against an xsd schema.
 ## Syntax
 ### FromFile
-```ps
+```powershell
 Test-NuspecManifest -Path <string> [-Schema <string>] [<CommonParameters>]
 ```
 ### FromXml
-```ps
+```powershell
 Test-NuspecManifest -Nuspec <xml> [-Schema <string>] [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Test-NuspecManifest -Path .\package.nuspec -Schema .\nuspec.xsd
 ```
 This example will test the file 'package.nuspec' against the schema 'nuspec.xsd'.
 ### Example 2
-```ps
+```powershell
 Test-NuspecManifest -Nuspec $NuspecContent
 ```
 This example will test the xml document contained in a variable against the default Nuspec schema.
@@ -65,8 +66,10 @@ Will use 'Get-NuspecSchema' if omitted.
 ## Inputs
 ****
 
+
 ## Outputs
 **System.Boolean**
+
 Returns a boolean specifying whether or not the manifest is conform to teh schema.
 ## Related Links
 - [Get-NuspecSchema](Get-NuspecSchema.md)

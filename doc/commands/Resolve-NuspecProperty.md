@@ -1,5 +1,6 @@
 # Resolve-NuspecProperty
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Resolves a property to be used in a Nuspec manifest.
@@ -7,22 +8,22 @@ Resolves a property to be used in a Nuspec manifest.
 Resolves a property that matches some mappings to be used in a Nuspec manifest.
 This CmdLet supports most of PowerShell module manifest file (psd1) properties.
 ## Syntax
-```ps
+```powershell
 Resolve-NuspecProperty [-Name] <string> [[-Value] <Object>] [-AcceptChocolateyProperties] [<CommonParameters>]
 ```
 ## Examples
 ### Example 1
-```ps
+```powershell
 Resolve-NuspecProperty -Name "version" -Value "1.0.0"
 ```
 This example will return the mapped property for "version" (which is "version") and the value specified.
 ### Example 2
-```ps
+```powershell
 Resolve-NuspecProperty -Name "RequiredModules" -Value @( "MyModule1", @{ ModuleName = "MyModule2" ; ModuleVersion = "1.0.0" }, @{ ModuleName = "MyModule3" ; RequiredVersion = "1.0.0" } )
 ```
 This example will return the mapped property for "RequiredModules" (which is "dependencies") and the value specified.
 ### Example 3
-```ps
+```powershell
 Resolve-NuspecProperty -Name "CompanyName"
 ```
 This example will return the mapped property for "CompanyName" (which is "owners").
@@ -61,8 +62,10 @@ A switch specifying whether or not to accept Chocolatey-specific properties.
 ## Inputs
 ****
 
+
 ## Outputs
 **System.Management.Automation.PSCustomObject**
+
 Returns a PSCustomObject containing the name and value of the mapped property.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)
