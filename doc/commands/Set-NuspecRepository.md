@@ -1,5 +1,6 @@
 # Set-NuspecRepository
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Sets the repository information in a Nuspec manifest.
@@ -75,9 +76,11 @@ A switch sepecifying whether or not to override repository if it already exists.
 
 ## Inputs
 **System.Object**
+
 Accepts an object containing the Name and Value as an input from the pipeline.
 ## Outputs
 **System.Xml.XmlDocument**
+
 Returns an XmlDocument containing the manifest.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)

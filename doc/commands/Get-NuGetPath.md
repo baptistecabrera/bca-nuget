@@ -1,5 +1,6 @@
 # Get-NuGetPath
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Gets the executable path of NuGet.exe.
@@ -19,6 +20,8 @@ This example will return the path of NuGet.exe.
 ## Inputs
 **None**
 
+
 ## Outputs
 **System.String**
+
 Returns a string containing the path to NuGet.exe.

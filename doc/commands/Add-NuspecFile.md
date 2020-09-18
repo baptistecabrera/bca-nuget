@@ -1,5 +1,6 @@
 # Add-NuspecFile
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Adds a file in a Nuspec manifest.
@@ -68,4 +69,5 @@ An XmlDocument containing the Nuspec manifest.
 
 ## Outputs
 **System.Xml.XmlDocument**
+
 Returns an XmlDocument containing the manifest.

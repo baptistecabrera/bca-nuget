@@ -1,5 +1,6 @@
 # Add-NuspecDependency
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Adds a dependency in a Nuspec manifest.
@@ -105,9 +106,11 @@ An XmlDocument containing the Nuspec manifest.
 
 ## Inputs
 **System.Object**
+
 Accepts an object containing the Name/Id and Version as an input from the pipeline.
 ## Outputs
 **System.Xml.XmlDocument**
+
 Returns an XmlDocument containing the manifest.
 ## Related Links
 - [https://docs.microsoft.com/en-us/nuget/consume-packages/dependency-resolution](https://docs.microsoft.com/en-us/nuget/consume-packages/dependency-resolution)

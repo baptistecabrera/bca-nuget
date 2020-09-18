@@ -1,5 +1,6 @@
 # Resolve-NuspecRepository
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Resolves a repository from an URI to be used in a Nuspec manifest.
@@ -40,8 +41,10 @@ An URI containing the repository URI.
 ## Inputs
 ****
 
+
 ## Outputs
 **System.Management.Automation.PSCustomObject**
+
 Returns a PSCustomObject containing the repository properties.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)

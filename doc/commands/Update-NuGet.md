@@ -1,5 +1,6 @@
 # Update-NuGet
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Updates NuGet.exe.

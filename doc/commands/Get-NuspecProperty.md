@@ -1,5 +1,6 @@
 # Get-NuspecProperty
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Gets a propertyand its value in a Nuspec manifest.
@@ -58,8 +59,10 @@ An XmlDocument containing the Nuspec manifest.
 ## Inputs
 ****
 
+
 ## Outputs
 **System.Management.Automation.PSCustomObject**
+
 Returns a PSCustomObject containing the name and value of the mapped property.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)

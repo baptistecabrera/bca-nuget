@@ -1,5 +1,6 @@
 # ConvertTo-NuspecManifest
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Converts an object to a NuspecManifest.
@@ -67,9 +68,11 @@ If used and a dependency does not match, it will be excluded fro the resulting n
 
 ## Inputs
 **System.Object**
+
 Accepts an object representing data that can be mapped to Nuspec properties and converted to a Nuspec manifest.
 ## Outputs
 **System.Xml.XmlDocument**
+
 Returns an XmlDocument containing the manifest.
 ## Notes
 This version supports mostly PowerShell Module amd Scripts File Info properties.

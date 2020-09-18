@@ -1,5 +1,6 @@
 # Resolve-NuspecProperty
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Resolves a property to be used in a Nuspec manifest.
@@ -61,8 +62,10 @@ A switch specifying whether or not to accept Chocolatey-specific properties.
 ## Inputs
 ****
 
+
 ## Outputs
 **System.Management.Automation.PSCustomObject**
+
 Returns a PSCustomObject containing the name and value of the mapped property.
 ## Related Links
 - [Set-NuspecProperty](Set-NuspecProperty.md)

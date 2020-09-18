@@ -1,5 +1,6 @@
 # Save-NuspecManifest
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Saves a Nuspec manifest.
@@ -44,9 +45,11 @@ An XmlDocument containing the Nuspec manifest.
 
 ## Inputs
 **System.Xml.XmlDocument**
+
 Accepts an XmlDocument containing the manifest.
 ## Outputs
 **System.String**
+
 Returns a string containing the path to the manifest file
 ## Related Links
 - [ConvertTo-NuspecManifest](ConvertTo-NuspecManifest.md)

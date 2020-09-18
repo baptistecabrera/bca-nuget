@@ -1,5 +1,6 @@
 # Install-NuGet
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Installs NuGet.exe.

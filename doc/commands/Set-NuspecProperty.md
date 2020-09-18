@@ -1,5 +1,6 @@
 # Set-NuspecProperty
 Type: Function
+
 Module: [Bca.Nuget](../ReadMe.md)
 
 Sets a property value in a Nuspec manifest.
@@ -103,9 +104,11 @@ A switch specifying whether or not to override teh value.
 
 ## Inputs
 **System.Object**
+
 Accepts an object containing the Name and Value as an input from the pipeline.
 ## Outputs
 **System.Xml.XmlDocument**
+
 Returns an XmlDocument containing the manifest.
 ## Related Links
 - [Resolve-NuspecProperty](Resolve-NuspecProperty.md)
