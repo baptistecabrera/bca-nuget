@@ -1,4 +1,7 @@
 # Bca.NuGet
+![Platform](https://img.shields.io/powershellgallery/p/Bca.Nuget?logo=powershell&logoColor=white) [![License: MIT](https://img.shields.io/github/license/baptistecabrera/bca-nuget?logo=open-source-initiative&logoColor=white)](https://opensource.org/licenses/MIT)
+
+[![GitHub Release](https://img.shields.io/github/v/tag/baptistecabrera/bca-nuget?logo=github&logoColor=white&label=release)](https://github.com/baptistecabrera/bca-nuget/releases) [![PowerShell Gallery](https://img.shields.io/powershellgallery/v/Bca.Nuget?color=informational&logo=powershell&logoColor=white)](https://www.powershellgallery.com/packages/bca.Nuget) [![Nuget](https://img.shields.io/nuget/v/Bca.Nuget?color=informational&logo=nuget&logoColor=white)](https://www.nuget.org/packages/Bca.Nuget/) [![Chocolatey](https://img.shields.io/chocolatey/v/bca-nuget?color=informational&logo=chocolatey&logoColor=white)](https://chocolatey.org/packages/bca-nuget)
 
 ## Description
 
@@ -10,30 +13,36 @@ _Bca.NuGet_ is a PowerShell module used to manage NuGet packages, but more impor
 - _Bca.NuGet_ has been created to answer my needs to streamline my package automation, but I provide it to people who may need such a tool.
 - It may contain bugs or lack some features, in this case, feel free to open an issue, and I'll manage it as best as I can.
 - This _GitHub_ repository is not the primary one, see transparency for more information.
-- Functions that use `nuget` command are Windows-compatible only (for now).
+- Functions that use `nuget` command (such as `New-NuGetPackage`) are natively Windows-compatible only (for now), but there is a workaround:
+  - Install [Mono 4.4.2 or later](https://www.mono-project.com/docs/getting-started/install/), or skip to the last step if [dotnet CLI](https://docs.microsoft.com/en-us/dotnet/core/tools/) is sufficient for your needs;
+  - Call the function `Get-NuGetPath`, and create an alias to this command: `alias nuget="mono /path/to/nuget.exe"`
+  - Call the function `Invoke-NuGetCommand` by using the `NuGetCommand` parameter with either the alias for `nuget.exe` or `dotnet`, for instance:
+    - `Invoke-NuGetCommand -Command "restore" -NuGetCommand "nuget"`
+    - `Invoke-NuGetCommand -Command "restore" -NuGetCommand "dotnet"`
+    - `Invoke-NuGetCommand -Command "add" -Target "source https://api.nuget.org/v3/index.json" -Parameters @{ "name" = "NuGet.org" } -NuGetCommand "dotnet nuget"`
 
 ## Dependencies
 
-- `Bca.Spdx` version `0.0.8`
-- Although it is not a dependcy, _Bca.NuGet_ uses `Test-Xml` from module `Pscx`, in the function `Test-NuspecManifest`.
+- [`Bca.Spdx`](https://github.com/baptistecabrera/bca-spdx) version `0.1.1` or greater
+- Although it is not a dependcy, _Bca.NuGet_ uses `Test-Xml` from module [`Pscx`](https://github.com/Pscx/Pscx), in the function `Test-NuspecManifest`.
 
 ## Examples
 
 ### Convert a PS Module Manifest
 
-```ps
+```powershell
 Import-PowerShellDataFile -Path .\MyModule.psd1 | ConvertTo-NuspecManifest | Save-NuspectManifest -Path "C:\MyModule.nuspec"
 ```
 
 ### Convert a PS Module Object
 
-```ps
+```powershell
 Get-Module -Name MyModule | ConvertTo-NuspecManifest | Save-NuspectManifest -Path "C:\MyModule.nuspec"
 ```
 
 ### Convert a PS Script Info
 
-```ps
+```powershell
 Test-ScriptFileInfo C:\MyScript.ps1 | ConvertTo-NuspecManifest | Save-NuspectManifest -Path "C:\MyScript.nuspec"
 ```
 
@@ -41,6 +50,13 @@ Test-ScriptFileInfo C:\MyScript.ps1 | ConvertTo-NuspecManifest | Save-NuspectMan
 Find extended documentation [at this page](doc/ReadMe.md).
 
 ## How to install
+
+### The easiest way
+
+In a PowerShell console, run the following:
+```powershell
+Find-Module -Name Bca.Nuget | Install-Module
+```
 
 ### Package
 
@@ -70,7 +86,7 @@ _Please not that to date I am the only developper for this module._
 [![Build Status](https://dev.azure.com/baptistecabrera/Bca/_apis/build/status/Build/Bca.Nuget?repoName=bca-nuget&branchName=master)](https://dev.azure.com/baptistecabrera/Bca/_build/latest?definitionId=15&repoName=bca-nuget&branchName=master)
 
 The CI is an Azure DevOps build pipeline that will:
-- Test the module with _[Pester](https://pester.dev/)_ tests;
+- Test the module and does code coverage with _[Pester](https://pester.dev/)_;
 - Run the _[PSScriptAnalyzer](https://github.com/PowerShell/PSScriptAnalyzer)_;
 - Mirror the repository to GitHub
 
