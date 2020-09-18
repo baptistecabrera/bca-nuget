@@ -3,7 +3,7 @@ Tags: `Linux` `MacOS` `NuGet` `Package` `PackageManager` `Packaging` `Windows`
 
 Minimum PowerShell version: `5.1`
 
-PowerShell module to create and manage NuGet packages.
+PowerShell module to create and manage Nuspec manifests and NuGet packages.
 
 ## Commands
 - [Add-NuspecContentFile](commands/Add-NuspecContentFile.md)

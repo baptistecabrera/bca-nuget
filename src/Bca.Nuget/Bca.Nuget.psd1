@@ -30,7 +30,7 @@
     Copyright       = '(c) 2020 Bca. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description     = 'PowerShell module to create and manage NuGet packages.'
+    Description     = 'PowerShell module to create and manage Nuspec manifests and NuGet packages.'
 
     # Minimum version of the Windows PowerShell engine required by this module
     PowerShellVersion = '5.1'
