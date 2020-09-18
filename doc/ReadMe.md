@@ -1,6 +1,8 @@
 # Bca.Nuget `0.2.0`
 Tags: `Linux` `MacOS` `NuGet` `Package` `PackageManager` `Packaging` `Windows`
 
+Minimum PowerShell version: `5.1`
+
 PowerShell module to create and manage NuGet packages.
 
 ## Commands
